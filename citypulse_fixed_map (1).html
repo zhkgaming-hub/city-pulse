@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CityPulse — Your City. One Pulse.</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============ LEAFLET CORE (inlined, trimmed) ============ */
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane > svg,.leaflet-pane > canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
+.leaflet-container{overflow:hidden;-webkit-tap-highlight-color:transparent;background:#0d1526}
+.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}
+.leaflet-tile{filter:inherit;visibility:hidden}
+.leaflet-tile-loaded{visibility:inherit}
+.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}
+.leaflet-overlay-pane svg,.leaflet-overlay-pane canvas{-moz-user-select:none}
+.leaflet-pane{z-index:400}
+.leaflet-tile-pane{z-index:200}
+.leaflet-overlay-pane{z-index:400}
+.leaflet-shadow-pane{z-index:500}
+.leaflet-marker-pane{z-index:600}
+.leaflet-tooltip-pane{z-index:650}
+.leaflet-popup-pane{z-index:700}
+.leaflet-map-pane canvas{z-index:100}
+.leaflet-map-pane svg{z-index:200}
+.leaflet-vml-shape{width:1px;height:1px}
+.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}
+.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}
+.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}
+.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}
+.leaflet-control{float:left;clear:both}
+.leaflet-right .leaflet-control{float:right}
+.leaflet-top .leaflet-control{margin-top:12px}
+.leaflet-bottom .leaflet-control{margin-bottom:12px}
+.leaflet-left .leaflet-control{margin-left:12px}
+.leaflet-right .leaflet-control{margin-right:12px}
+.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;-o-transition:opacity .2s linear;transition:opacity .2s linear}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}
+.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}
+.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);-o-transition:-o-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}
+.leaflet-interactive{cursor:pointer}
+.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}
+.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}
+.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}
+.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:14px;background:#0F1A3D;color:#EAF0FF;box-shadow:0 12px 28px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08)}
+.leaflet-popup-content{margin:0;line-height:1.4;min-width:240px}
+.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-left:-20px;overflow:hidden;pointer-events:none}
+.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;transform:rotate(45deg);background:#0F1A3D}
+.leaflet-popup-close-button{display:none}
+.leaflet-control-zoom{border-radius:10px !important;overflow:hidden}
+.leaflet-control-zoom a{background:#0F1A3D !important;color:#EAF0FF !important;border-bottom:1px solid rgba(255,255,255,.08) !important;width:32px !important;height:32px !important;line-height:32px !important}
+.leaflet-control-attribution{background:rgba(10,17,40,.75) !important;color:#8A93A6 !important;font-size:10px !important;padding:2px 8px !important;border-radius:6px 0 0 0}
+.leaflet-control-attribution a{color:#9fb4ff !important}
+.leaflet-marker-icon.cp-marker{background:none;border:none}
+
+/* ============ DESIGN TOKENS ============ */
+:root{
+  --navy:#080D1F; --navy2:#0E1738; --panel:#10193C; --panel2:#141F49;
+  --paper:#F4F7FC; --ink:#0A0F22;
+  --teal:#19C7AE; --teal-d:#0E8E7C; --blue:#4C82FF; --amber:#F0A83D; --red:#EF5350; --grape:#9B7BFF;
+  --line:rgba(255,255,255,.09); --line-soft:rgba(255,255,255,.05);
+  --txt:#EAF0FF; --txt-dim:#9AA6C8; --txt-faint:#6C7699;
+  --r-lg:18px; --r-md:12px; --r-sm:8px;
+  --disp:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:var(--txt);font-family:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit}
+::selection{background:var(--teal);color:var(--ink)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#233066;border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+
+.bg-grid{position:fixed;inset:0;z-index:-1;background-image:
+  radial-gradient(circle at 15% 8%, rgba(76,130,255,.12), transparent 40%),
+  radial-gradient(circle at 85% 92%, rgba(25,199,174,.10), transparent 45%),
+  linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:auto,auto,42px 42px,42px 42px; background-color:var(--navy);}
+
+/* ---------- NAV ---------- */
+.topnav{position:sticky;top:0;z-index:500;backdrop-filter:blur(14px);background:rgba(8,13,31,.86);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:12px 22px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.2px;flex-shrink:0}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(25,199,174,.18)}
+.navwrap{position:relative;flex:1;min-width:0;display:flex;align-items:center}
+.navlinks{display:flex;gap:2px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
+.navlinks::-webkit-scrollbar{display:none}
+.navscroll{display:none;flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--panel);border:1px solid var(--line);color:var(--txt-dim);align-items:center;justify-content:center;font-size:15px;z-index:2}
+.navscroll.show{display:flex}
+.navscroll:hover{color:var(--txt);background:rgba(255,255,255,.08)}
+.navscroll-l{margin-right:4px}
+.navscroll-r{margin-left:4px}
+.navlinks button{background:none;border:none;color:var(--txt-dim);font-size:13.5px;font-weight:500;padding:9px 12px;border-radius:9px;white-space:nowrap;transition:.15s;flex-shrink:0}
+.navlinks button:hover{color:var(--txt);background:rgba(255,255,255,.05)}
+.navlinks button.active{color:var(--ink);background:var(--teal)}
+.nav-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.loc-select{background:var(--panel);border:1px solid var(--line);color:var(--txt);font-size:12.5px;padding:7px 10px;border-radius:9px}
+.icon-btn{position:relative;width:34px;height:34px;border-radius:9px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--txt-dim);font-size:15px}
+.icon-btn:hover{color:var(--txt)}
+.badge-dot{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+.navburger{display:none}
+
+/* ---------- STATUS BAR ---------- */
+.statusbar{background:var(--navy2);border-bottom:1px solid var(--line);font-size:12px;color:var(--txt-dim)}
+.statusbar-inner{max-width:1440px;margin:0 auto;padding:7px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-family:var(--mono)}
+.pulse-live{display:flex;align-items:center;gap:6px;color:var(--teal);font-weight:600}
+.pulse-live .p{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(25,199,174,.55)}70%{box-shadow:0 0 0 7px rgba(25,199,174,0)}100%{box-shadow:0 0 0 0 rgba(25,199,174,0)}}
+.sb-sep{color:var(--line)}
+.sb-item b{color:var(--txt)}
+
+/* ---------- LAYOUT ---------- */
+.view{display:none;max-width:1440px;margin:0 auto;padding:28px 22px 70px}
+.view.active{display:block;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{color:var(--teal);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;margin:0 0 6px}
+h1.pagetitle{font-family:var(--disp);font-size:30px;margin:0 0 6px;font-weight:700}
+.pagesub{color:var(--txt-dim);font-size:14.5px;margin:0 0 26px;max-width:640px;line-height:1.55}
+
+/* ---------- CARD ---------- */
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.card-tight{padding:16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:980px){.g4,.g6{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g2,.g3,.g4,.g6{grid-template-columns:1fr}}
+
+.source-tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:20px;font-weight:600;letter-spacing:.02em}
+.src-live{background:rgba(25,199,174,.14);color:var(--teal)}
+.src-sim{background:rgba(154,166,200,.14);color:var(--txt-dim)}
+.src-user{background:rgba(76,130,255,.14);color:var(--blue)}
+.src-ai{background:rgba(155,123,255,.16);color:var(--grape)}
+.src-delay{background:rgba(240,168,61,.15);color:var(--amber)}
+.source-tag .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:600;font-size:13.5px;border-radius:10px;border:1px solid transparent;padding:10px 18px;transition:.15s}
+.btn-primary{background:var(--teal);color:var(--ink)}
+.btn-primary:hover{background:#28d8bd}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--txt)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{background:#5f8fff}
+.btn-sm{padding:7px 12px;font-size:12.5px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.pill{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:20px}
+.pill-good{background:rgba(25,199,174,.15);color:var(--teal)}
+.pill-warn{background:rgba(240,168,61,.15);color:var(--amber)}
+.pill-bad{background:rgba(239,83,80,.15);color:var(--red)}
+.pill-info{background:rgba(76,130,255,.15);color:var(--blue)}
+
+/* ---------- HERO ---------- */
+.hero{padding:56px 0 40px;text-align:center;border-bottom:1px solid var(--line-soft);margin-bottom:34px}
+.hero h1{font-family:var(--disp);font-size:clamp(40px,7vw,72px);font-weight:700;line-height:1;margin:0 0 10px;letter-spacing:-1px}
+.hero .tag{font-family:var(--disp);font-size:18px;color:var(--teal);margin:0 0 18px;font-weight:600}
+.hero p{color:var(--txt-dim);max-width:560px;margin:0 auto 30px;font-size:15px;line-height:1.6}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ---------- GAUGE ---------- */
+.gaugewrap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.gauge{position:relative;width:168px;height:168px;flex-shrink:0}
+.gauge svg{transform:rotate(-90deg)}
+.gauge-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-num .n{font-family:var(--disp);font-size:38px;font-weight:700;line-height:1}
+.gauge-num .of{font-size:11px;color:var(--txt-faint)}
+.catbar-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;font-size:13px}
+.catbar-row .lbl{width:110px;flex-shrink:0;color:var(--txt-dim)}
+.catbar-track{flex:1;height:7px;background:rgba(255,255,255,.07);border-radius:6px;overflow:hidden}
+.catbar-fill{height:100%;border-radius:6px}
+.catbar-row .val{width:34px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--txt)}
+
+/* ---------- STAT CARD ---------- */
+.statcard{cursor:default}
+.statcard .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.statcard .label{font-size:12.5px;color:var(--txt-dim);font-weight:600}
+.statcard .value{font-family:var(--disp);font-size:27px;font-weight:700;margin:2px 0}
+.statcard .meta{font-size:12px;color:var(--txt-faint);display:flex;align-items:center;gap:6px}
+.trend-up{color:var(--red)}.trend-down{color:var(--teal)}.trend-flat{color:var(--txt-faint)}
+
+/* ---------- ACTIVITY FEED ---------- */
+.activity-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13px;animation:slidein .4s ease}
+@keyframes slidein{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.activity-item:last-child{border-bottom:none}
+.activity-item .t{font-family:var(--mono);color:var(--txt-faint);font-size:11px;flex-shrink:0;width:46px;padding-top:1px}
+.activity-item .dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+
+/* ---------- MAP PAGE ---------- */
+.map-layout{display:grid;grid-template-columns:250px 1fr;gap:16px;height:calc(100vh - 210px);min-height:560px}
+@media(max-width:980px){.map-layout{grid-template-columns:1fr;height:auto}}
+.filter-panel{overflow-y:auto}
+.filter-group{margin-bottom:18px}
+.filter-group h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--txt-faint);margin:0 0 10px}
+.chk-row{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:13px;cursor:pointer;user-select:none}
+.chk-row input{accent-color:var(--teal);width:15px;height:15px}
+#mapel{width:100%;height:100%;border-radius:var(--r-lg);border:1px solid var(--line)}
+.map-wrap{position:relative}
+.map-toolbar{position:absolute;top:12px;left:12px;z-index:900;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.map-toolbar input{background:rgba(15,23,55,.92);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:8px 12px;font-size:13px;width:210px}
+.map-toolbar .btn{background:rgba(15,23,55,.92)}
+.legend-float{position:absolute;bottom:12px;left:12px;z-index:900;background:rgba(15,23,55,.92);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:11.5px;display:flex;flex-direction:column;gap:5px}
+.legend-float .li{display:flex;align-items:center;gap:7px}
+
+.infopanel{position:absolute;top:12px;right:12px;z-index:900;width:280px;max-width:calc(100% - 24px)}
+
+/* ---------- FORMS ---------- */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--txt-dim);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--navy2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:11px 13px;font-size:13.5px}
+.field textarea{resize:vertical;min-height:90px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--teal)}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--navy2);color:var(--txt-dim);padding:8px 14px;border-radius:20px;font-size:13px}
+.chip.sel{background:var(--teal);color:var(--ink);border-color:var(--teal);font-weight:600}
+.dropzone{border:2px dashed var(--line);border-radius:14px;padding:34px 20px;text-align:center;color:var(--txt-dim);cursor:pointer;transition:.15s}
+.dropzone:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ---------- CHAT ---------- */
+.chatwrap{display:flex;flex-direction:column;height:64vh;min-height:440px}
+.chatlog{flex:1;overflow-y:auto;padding:6px 4px;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:78%;padding:12px 15px;border-radius:14px;font-size:13.5px;line-height:1.55}
+.msg.user{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--navy2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg .datatag{margin-top:9px;padding-top:9px;border-top:1px solid var(--line-soft);font-size:11px;color:var(--txt-faint);display:flex;gap:14px;flex-wrap:wrap}
+.chatinput{display:flex;gap:10px;margin-top:14px}
+.chatinput input{flex:1;background:var(--navy2);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px 16px;font-size:13.5px}
+.suggestrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.suggestrow button{background:var(--navy2);border:1px solid var(--line);color:var(--txt-dim);padding:7px 12px;border-radius:20px;font-size:12px}
+.suggestrow button:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ---------- TOASTS / NOTIFICATIONS ---------- */
+.toaststack{position:fixed;top:80px;right:18px;z-index:2000;display:flex;flex-direction:column;gap:10px;width:320px;max-width:calc(100vw - 30px)}
+.toast{background:var(--panel2);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:13px 15px;box-shadow:0 14px 34px rgba(0,0,0,.4);animation:toastin .3s ease}
+@keyframes toastin{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.toast .th{font-weight:700;font-size:13px;margin-bottom:3px;display:flex;justify-content:space-between}
+.toast .tb{font-size:12.5px;color:var(--txt-dim);line-height:1.4}
+.toast .tx{cursor:pointer;color:var(--txt-faint);font-size:15px;background:none;border:none}
+
+.notifdrawer{position:fixed;top:0;right:-380px;width:360px;height:100vh;background:var(--navy2);border-left:1px solid var(--line);z-index:1900;transition:right .25s ease;padding:20px;overflow-y:auto}
+.notifdrawer.open{right:0}
+.notif-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:13px;cursor:pointer}
+.notif-item:hover{background:rgba(255,255,255,.03)}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1800;display:none}
+.scrim.show{display:block}
+
+/* ---------- MISC ---------- */
+.divider{height:1px;background:var(--line);margin:22px 0}
+.section-title{font-family:var(--disp);font-size:20px;font-weight:700;margin:0 0 4px}
+.section-sub{color:var(--txt-dim);font-size:13.5px;margin:0 0 18px}
+.flow-step{display:flex;align-items:center;gap:10px;color:var(--txt-dim);font-size:13px}
+.flow-arrow{color:var(--txt-faint);font-size:15px}
+.linkchain{display:flex;flex-direction:column;gap:0;align-items:flex-start}
+.linkchain .lc-node{background:var(--navy2);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:13px}
+.linkchain .lc-arrow{color:var(--teal);font-family:var(--mono);font-size:13px;padding:6px 0 6px 20px}
+.evidence-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.evidence-row:last-child{border-bottom:none}
+.replaybar{display:flex;align-items:center;gap:14px;margin:18px 0}
+.replay-slider{flex:1;accent-color:var(--teal)}
+.speedbtns{display:flex;gap:6px}
+.speedbtns button{padding:5px 10px;font-size:12px;border-radius:7px;background:var(--navy2);border:1px solid var(--line);color:var(--txt-dim)}
+.speedbtns button.sel{background:var(--teal);color:var(--ink);border-color:var(--teal)}
+.timeline-track{position:relative;height:6px;background:rgba(255,255,255,.08);border-radius:4px;margin:8px 0 4px}
+.timeline-fill{position:absolute;left:0;top:0;height:100%;background:var(--teal);border-radius:4px}
+.timeline-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--txt-faint)}
+.status-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px}
+.feedcard{display:flex;flex-direction:column;gap:8px}
+.feedcard .fh{display:flex;justify-content:space-between;align-items:center}
+.confbar{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin:6px 0}
+.confbar-fill{height:100%;background:var(--grape);border-radius:4px}
+.demotoggle{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.switch{position:relative;width:40px;height:22px;background:var(--navy2);border-radius:20px;border:1px solid var(--line);cursor:pointer;flex-shrink:0}
+.switch .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--txt-dim);border-radius:50%;transition:.2s}
+.switch.on{background:rgba(25,199,174,.25);border-color:var(--teal)}
+.switch.on .knob{left:20px;background:var(--teal)}
+.zone-timeline .zt-item{display:flex;gap:12px;padding:8px 0;font-size:13px}
+.zone-timeline .zt-time{font-family:var(--mono);color:var(--txt-faint);width:52px;flex-shrink:0}
+footer.sitefoot{border-top:1px solid var(--line-soft);margin-top:50px;padding:26px 22px;text-align:center;color:var(--txt-faint);font-size:12px;max-width:1440px;margin-left:auto;margin-right:auto}
+.mobile-hide{display:inline}
+@media(max-width:760px){
+  .navwrap{display:none}
+  .navburger{display:flex}
+  .mobile-hide{display:none}
+}
+.aiframe{position:relative;display:inline-block;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.aiframe img{display:block;max-width:100%;max-height:320px}
+.bbox{position:absolute;border:2px solid var(--grape);border-radius:4px;box-shadow:0 0 0 3000px rgba(0,0,0,.0)}
+.bbox .bbtag{position:absolute;top:-22px;left:-2px;background:var(--grape);color:#fff;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px 5px 5px 0}
+.scanline{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);animation:scan 1.4s linear infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.progresslog{font-family:var(--mono);font-size:12.5px;color:var(--teal);display:flex;flex-direction:column;gap:5px;margin-top:14px}
+/* ============ COMPLETION PATCH CSS ============ */
+.cp-modal{position:fixed;inset:0;z-index:2500;background:rgba(3,6,18,.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
+.cp-modal-card{position:relative;width:100%;max-width:520px;max-height:88vh;overflow:auto}
+.cp-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--txt-faint);font-size:18px}
+.mm-item{display:block;width:100%;text-align:left;background:none;border:none;color:var(--txt);font-size:15px;padding:12px 8px;border-bottom:1px solid var(--line-soft)}
+.mm-item.on{color:var(--teal);font-weight:600}
+.bottomnav{display:none}
+.gsearch{position:relative}
+.gsearch input{width:200px;background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:7px 10px;font-size:12.5px}
+.gs-res{display:none;position:absolute;top:110%;left:0;width:280px;background:var(--navy2);border:1px solid var(--line);border-radius:12px;overflow:hidden;z-index:600}
+.gs-res button{display:flex;flex-direction:column;align-items:flex-start;width:100%;background:none;border:none;color:var(--txt);padding:9px 12px;border-bottom:1px solid var(--line-soft);font-size:13px}
+.gs-res button:hover{background:rgba(255,255,255,.05)}
+.gs-res small{color:var(--txt-faint);font-size:11px}
+.catbar-row{cursor:pointer}.catbar-row:hover .lbl{color:var(--teal)}
+.mm-item:focus-visible,.btn:focus-visible,.navlinks button:focus-visible,.icon-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+@media(max-width:760px){
+  .bottomnav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:900;background:rgba(8,13,31,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+  .bottomnav button{flex:1;background:none;border:none;color:var(--txt-dim);font-size:10.5px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .bottomnav button span{font-size:18px}.bottomnav button.on{color:var(--teal)}
+  .view{padding-bottom:90px}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div id="app"></div>
+<div class="toaststack" id="toastStack"></div>
+<div class="scrim" id="scrim"></div>
+<div class="notifdrawer" id="notifDrawer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+/* =========================================================================
+   CITYPULSE — client-side civic intelligence demo
+   Live: Open-Meteo (weather), OpenStreetMap (map tiles)
+   Everything else (reports, hazards, traffic, AQI, alerts, AI, links)
+   is a clearly-labeled simulated layer, per the app's own honesty rules.
+   ========================================================================= */
+
+const LOCATIONS = {
+  jaipur:  {name:'Jaipur, Rajasthan',  lat:26.9124, lon:75.7873},
+  delhi:   {name:'Delhi',              lat:28.6139, lon:77.2090},
+  mumbai:  {name:'Mumbai',             lat:19.0760, lon:72.8777},
+  bengaluru:{name:'Bengaluru',         lat:12.9716, lon:77.5946},
+  hyderabad:{name:'Hyderabad',         lat:17.3850, lon:78.4867},
+};
+
+const ZONE_OFFSETS = [ // relative lat/lon jitter for mock zone placement around a city center
+  {zone:'Sector 4', dx:0.018, dy:0.012}, {zone:'Sector 7', dx:-0.02, dy:0.02},
+  {zone:'Main Road', dx:0.005, dy:-0.015}, {zone:'MI Road', dx:-0.012,dy:-0.006},
+  {zone:'Zone 2', dx:0.025,dy:-0.01}, {zone:'Civil Lines', dx:-0.022,dy:0.008}
+];
+
+const nowStr = ()=> new Date().toLocaleTimeString('en-GB',{hour12:false});
+const pad = n => String(n).padStart(2,'0');
+const uid = ()=> Math.random().toString(36).slice(2,8);
+const rand = (a,b)=> a + Math.random()*(b-a);
+const choice = arr => arr[Math.floor(Math.random()*arr.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------------------------- GLOBAL STATE ---------------------------- */
+const DB = {
+  locKey:'jaipur',
+  loc: LOCATIONS.jaipur,
+  weather:null,             // filled by fetchWeather
+  weatherSource:'SIMULATED',
+  weatherUpdated:null,
+  feedsHealthy:0,
+  civic:{score:78,prevScore:81,cats:{
+    'Road Safety':74,'Traffic':61,'Environment':80,'Infrastructure':70,'Citizen Reports':83
+  }},
+  hazards:[], reports:[], alerts:[], activity:[], insights:[],
+  hourly:null, // 24h synthetic series
+  demoMode:false,
+  notifications:[],
+  reportCounter:4821,
+};
+
+let map, markerLayers = {}, infoPanelMarker=null;
+let charts = {};
+
+/* ---------------------------- SEED MOCK DATA ---------------------------- */
+function seedHazards(){
+  const types = [
+    {t:'Open Manhole', icon:'🔴', sev:'HIGH', src:'AI Detection + Citizen Reports'},
+    {t:'Pothole', icon:'🟠', sev:'MEDIUM', src:'AI Detection'},
+    {t:'Traffic', icon:'🔵', sev:'MEDIUM', src:'Traffic Feed'},
+    {t:'Waterlogging', icon:'💧', sev:'HIGH', src:'Citizen Reports'},
+    {t:'Garbage', icon:'🟢', sev:'LOW', src:'Citizen Reports'},
+    {t:'Streetlight', icon:'🟣', sev:'LOW', src:'Citizen Reports'},
+    {t:'AI Hazard', icon:'⚠️', sev:'CRITICAL', src:'CityPulse Vision'},
+  ];
+  DB.hazards = [];
+  for(let i=0;i<12;i++){
+    const z = choice(ZONE_OFFSETS);
+    const ty = choice(types);
+    DB.hazards.push({
+      id:'HZ-'+uid(), type:ty.t, icon:ty.icon, severity:ty.sev, source:ty.src,
+      zone:z.zone, lat:DB.loc.lat+z.dy+rand(-.006,.006), lon:DB.loc.lon+z.dx+rand(-.006,.006),
+      confidence: Math.round(rand(70,98)), reports:Math.round(rand(0,6)),
+      detectedMinsAgo: Math.round(rand(2,180)), hour: Math.floor(rand(0,24))
+    });
+  }
+}
+function seedReports(){
+  const types=['Open Manhole','Pothole','Flooding','Garbage','Broken Streetlight','Traffic Issue','Other'];
+  DB.reports=[];
+  for(let i=0;i<24;i++){
+    const z=choice(ZONE_OFFSETS);
+    DB.reports.push({
+      id:'CP-2026-'+String(1000+i).padStart(4,'0'), type:choice(types), zone:z.zone,
+      lat:DB.loc.lat+z.dy+rand(-.008,.008), lon:DB.loc.lon+z.dx+rand(-.008,.008),
+      status: choice(['VERIFIED','UNDER AI VERIFICATION','NEEDS REVIEW']),
+      hour: Math.floor(rand(0,24)), desc:'Reported via CityPulse citizen app.'
+    });
+  }
+}
+function seedAlerts(){
+  DB.alerts=[
+    {id:'AL-'+uid(), location:'Sector 4', type:'Weather', condition:'Rainfall > 10 mm/hour', status:'ACTIVE', delivery:['In-app']},
+    {id:'AL-'+uid(), location:'Main Road', type:'Traffic', condition:'Traffic delay > 40%', status:'ACTIVE', delivery:['In-app','Email']},
+    {id:'AL-'+uid(), location:'Sector 7', type:'Air Quality', condition:'AQI > 150', status:'PAUSED', delivery:['Email']},
+  ];
+}
+function seedInsights(){
+  DB.insights=[
+    {id:uid(), zone:'Zone 4', title:'PATTERN DETECTED',
+     text:'Waterlogging reports increased shortly after rainfall intensified in Zone 4.',
+     signals:['Weather','Citizen Reports','Traffic'], window:'Last 60 minutes', correlation:'Moderate', confidence:72,
+     evidence:['Rainfall rose from 2mm/h to 11mm/h over 40 minutes','Waterlogging reports rose 65% in the same window','Traffic delay in the zone rose 42%']},
+    {id:uid(), zone:'Main Road', title:'CLUSTER DETECTED',
+     text:'Multiple pothole reports are concentrated along Main Road.',
+     signals:['Citizen Reports'], window:'Last 24 hours', correlation:'N/A — spatial cluster', confidence:80,
+     evidence:['6 independent pothole reports within a 400m stretch','No prior cluster recorded in the last 7 days at this location']},
+    {id:uid(), zone:'Sector 7', title:'UNUSUAL ACTIVITY',
+     text:'Streetlight complaints are higher than the recent baseline in Sector 7.',
+     signals:['Citizen Reports'], window:'Last 6 hours', correlation:'N/A — baseline deviation', confidence:64,
+     evidence:['4 streetlight reports vs a 7-day baseline of ~1 per 6 hours']},
+  ];
+}
+function seedActivity(){
+  DB.activity=[
+    {t:nowStr(), text:'Weather feed updated', color:'var(--teal)'},
+    {t:nowStr(), text:'New citizen report received — Sector 4', color:'var(--blue)'},
+    {t:nowStr(), text:'AI hazard detected — Main Road', color:'var(--grape)'},
+    {t:nowStr(), text:'Traffic feed updated', color:'var(--amber)'},
+  ];
+}
+function seedHourly(){
+  // 24 synthetic hourly points, used by Last 24 Hours + Replay
+  const h = {temp:[],rain:[],traffic:[],reports:[],aqi:[],civic:[]};
+  let t=22, r=0, tr=30, rp=0, aq=70, cv=82;
+  for(let i=0;i<24;i++){
+    t += rand(-1.2,1.4); r = clamp(r+rand(-1,2.2),0,14); tr = clamp(tr+rand(-4,6),15,95);
+    rp += Math.round(rand(0,3)); aq = clamp(aq+rand(-4,5),35,160); cv = clamp(cv+rand(-2.5,1.5),50,95);
+    h.temp.push(Math.round(t*10)/10); h.rain.push(Math.round(r*10)/10); h.traffic.push(Math.round(tr));
+    h.reports.push(rp); h.aqi.push(Math.round(aq)); h.civic.push(Math.round(cv));
+  }
+  DB.hourly = h;
+}
+
+function seedAll(){ seedHazards(); seedReports(); seedAlerts(); seedInsights(); seedActivity(); seedHourly(); }
+
+/* ---------------------------- LIVE WEATHER ---------------------------- */
+async function fetchWeather(){
+  try{
+    const {lat,lon} = DB.loc;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,visibility&hourly=temperature_2m,precipitation_probability&timezone=auto`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('bad response');
+    const j = await res.json();
+    const c = j.current;
+    DB.weather = {
+      temp: Math.round(c.temperature_2m), feels: Math.round(c.apparent_temperature),
+      rain: c.rain ?? c.precipitation ?? 0, humidity: c.relative_humidity_2m,
+      wind: Math.round(c.wind_speed_10m), windDir: c.wind_direction_10m,
+      cloud: c.cloud_cover, visibility: c.visibility ? Math.round(c.visibility/1000)+' km' : '—',
+      condition: weatherCodeToText(c.weather_code),
+      rainProb: j.hourly?.precipitation_probability?.[0] ?? Math.round(rand(10,45))
+    };
+    DB.weatherSource='LIVE';
+    DB.weatherUpdated = new Date();
+  }catch(e){
+    // graceful fallback — clearly labeled simulated, never claimed live
+    DB.weather = {
+      temp: Math.round(rand(24,34)), feels: Math.round(rand(25,37)), rain: Math.round(rand(0,3)*10)/10,
+      humidity: Math.round(rand(30,70)), wind: Math.round(rand(5,22)), windDir: Math.round(rand(0,360)),
+      cloud: Math.round(rand(10,80)), visibility:'10 km', condition:'Partly Cloudy', rainProb: Math.round(rand(10,45))
+    };
+    DB.weatherSource='SIMULATED';
+    DB.weatherUpdated = new Date();
+  }
+  refreshWeatherDependentUI();
+}
+function weatherCodeToText(code){
+  const map = {0:'Clear Sky',1:'Mostly Clear',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Fog',
+   51:'Light Drizzle',53:'Drizzle',55:'Dense Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',
+   71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Rain Showers',82:'Violent Showers',
+   95:'Thunderstorm',96:'Thunderstorm w/ Hail',99:'Thunderstorm w/ Hail'};
+  return map[code] || 'Mixed Conditions';
+}
+
+/* ---------------------------- FEEDS (status page) ---------------------------- */
+function computeFeeds(){
+  const feeds=[
+    {name:'Weather', source:'Open-Meteo', status:DB.weatherSource==='LIVE'?'LIVE':'SIMULATED', updated: DB.weatherUpdated? timeAgo(DB.weatherUpdated):'—', type:'Environmental'},
+    {name:'Map Data', source:'OpenStreetMap', status:'AVAILABLE', updated:'static tiles', type:'Geographic'},
+    {name:'Citizen Reports', source:'CityPulse Database', status:'LIVE', updated:'just now', type:'User-generated'},
+    {name:'AI Detection', source:'CityPulse Vision (simulated model)', status:'AVAILABLE', updated:'on demand', type:'AI Inference'},
+    {name:'Traffic', source:'Demo Traffic Feed', status:'DELAYED', updated:'4 min ago', type:'Simulated'},
+    {name:'Air Quality', source:'Demo AQI Feed', status:'SIMULATED', updated:'2 min ago', type:'Simulated'},
+    {name:'Civic Data', source:'Demo Feed', status:'SIMULATED', updated:'—', type:'Simulated'},
+  ];
+  DB.feedsHealthy = feeds.filter(f=>f.status==='LIVE'||f.status==='AVAILABLE').length;
+  return feeds;
+}
+function timeAgo(d){
+  const s = Math.round((Date.now()-d.getTime())/1000);
+  if(s<60) return s+' sec ago';
+  return Math.round(s/60)+' min ago';
+}
+
+/* ---------------------------- ROUTING / VIEWS ---------------------------- */
+const NAV = [
+  ['home','Home'], ['map','Live Map'], ['links','Possible Links'], ['hours','Last 24 Hours'],
+  ['replay','Replay'], ['alerts','Get Alerts'], ['feeds','Feed Status'], ['ai','AI Detection'],
+  ['ask','Ask CityPulse'], ['report','Report Issue']
+];
+let currentView='home';
+
+function go(view){
+  currentView=view;
+  document.querySelectorAll('.navlinks button').forEach(b=>b.classList.toggle('active', b.dataset.v===view));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+view));
+  if(view==='map') setTimeout(()=>{ initMapIfNeeded(); map && map.invalidateSize(); },50);
+  if(view==='hours') setTimeout(renderHoursCharts,30);
+  if(view==='replay') setTimeout(initReplay,30);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ---------------------------- APP SHELL ---------------------------- */
+function renderShell(){
+  const app=document.getElementById('app');
+  app.innerHTML = `
+  <div class="topnav">
+    <div class="nav-inner">
+      <div class="brand"><span class="dot"></span>CITYPULSE</div>
+      <div class="navwrap">
+        <button class="navscroll navscroll-l" id="navScrollL" aria-label="Scroll menu left">‹</button>
+        <nav class="navlinks" id="navlinks"></nav>
+        <button class="navscroll navscroll-r" id="navScrollR" aria-label="Scroll menu right">›</button>
+      </div>
+      <div class="nav-right">
+        <select class="loc-select mobile-hide" id="locSelect">
+          ${Object.entries(LOCATIONS).map(([k,v])=>`<option value="${k}" ${k===DB.locKey?'selected':''}>${v.name}</option>`).join('')}
+        </select>
+        <button class="icon-btn" id="notifBtn" title="Notifications">🔔<span class="badge-dot" id="notifBadge" style="display:none">0</span></button>
+        <button class="icon-btn mobile-hide" title="Profile">👤</button>
+        <button class="icon-btn navburger" id="burgerBtn" title="Menu">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="statusbar"><div class="statusbar-inner" id="statusbarInner"></div></div>
+
+  <main id="views"></main>
+
+  <footer class="sitefoot">
+    CityPulse is a hackathon MVP. Civic Health Score is a CityPulse composite indicator, not an official government rating.
+    Weather via Open-Meteo · Maps via OpenStreetMap · All correlations are possible links, not confirmed causation.
+    &nbsp;·&nbsp; <a href="#" id="trustLink" style="color:var(--teal)">How CityPulse stays honest</a>
+  </footer>
+  `;
+  document.getElementById('navlinks').innerHTML = NAV.map(([k,l])=>`<button data-v="${k}">${l}</button>`).join('');
+  document.querySelectorAll('.navlinks button').forEach(b=> b.onclick = ()=>go(b.dataset.v));
+  setupNavScroll();
+  document.getElementById('locSelect').onchange = e=> changeLocation(e.target.value);
+  document.getElementById('notifBtn').onclick = toggleNotifDrawer;
+  document.getElementById('trustLink').onclick = (e)=>{e.preventDefault(); openTrustModal();};
+  document.getElementById('burgerBtn').onclick = ()=>{
+    const v = prompt('Go to: '+NAV.map(n=>n[1]).join(', '));
+    const hit = NAV.find(n=>n[1].toLowerCase()===((v||'').toLowerCase()));
+    if(hit) go(hit[0]);
+  };
+
+  document.getElementById('views').innerHTML = NAV.map(([k])=>`<div class="view" id="view-${k}"></div>`).join('');
+}
+
+/* Desktop nav is horizontally scrollable when it doesn't fit — make that discoverable
+   and usable: chevron buttons, vertical-wheel-to-horizontal, drag-to-scroll, and
+   auto-hide the chevrons when there's nothing left to scroll to. */
+function setupNavScroll(){
+  const nl=document.getElementById('navlinks'), l=document.getElementById('navScrollL'), r=document.getElementById('navScrollR');
+  if(!nl||!l||!r) return;
+  const update=()=>{
+    const overflow = nl.scrollWidth > nl.clientWidth+2;
+    l.classList.toggle('show', overflow && nl.scrollLeft>4);
+    r.classList.toggle('show', overflow && nl.scrollLeft < nl.scrollWidth-nl.clientWidth-4);
+  };
+  l.onclick=()=>nl.scrollBy({left:-160,behavior:'smooth'});
+  r.onclick=()=>nl.scrollBy({left:160,behavior:'smooth'});
+  nl.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  nl.addEventListener('wheel', e=>{
+    if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){ nl.scrollLeft += e.deltaY; e.preventDefault(); }
+  }, {passive:false});
+  let dragging=false, startX=0, startScroll=0;
+  nl.addEventListener('mousedown', e=>{ dragging=true; startX=e.pageX; startScroll=nl.scrollLeft; nl.style.cursor='grabbing'; });
+  window.addEventListener('mouseup', ()=>{ dragging=false; nl.style.cursor=''; });
+  window.addEventListener('mousemove', e=>{ if(!dragging) return; nl.scrollLeft = startScroll - (e.pageX-startX); });
+  setTimeout(update,50);
+}
+
+function changeLocation(key){
+  DB.locKey=key; DB.loc=LOCATIONS[key];
+  seedAll();
+  fetchWeather();
+  pushActivity(`Location changed to ${DB.loc.name}`, 'var(--blue)');
+  renderAll();
+
+  // renderAll() rebuilds the map element, so initialize Leaflet against
+  // the new element instead of trying to use the removed map instance.
+  if(currentView==='map'){
+    setTimeout(()=>{
+      initMapIfNeeded();
+      if(map){
+        map.setView([DB.loc.lat,DB.loc.lon],14);
+        map.invalidateSize(true);
+        plotHazardsOnMap();
+      }
+    },80);
+  }
+}
+
+function renderStatusBar(){
+  const el = document.getElementById('statusbarInner');
+  if(!el) return;
+  const w = DB.weather || {};
+  const activeAlerts = DB.alerts.filter(a=>a.status==='ACTIVE'||a.status==='TRIGGERED').length;
+  const feeds = computeFeeds();
+  el.innerHTML = `
+    <span class="pulse-live"><span class="p"></span>LIVE</span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item"><b>${DB.loc.name}</b></span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item">Last updated: <b>${nowStr()}</b></span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item">Weather: <b>${w.temp!=null?w.temp+'°C':'—'}</b></span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item">Rain: <b>${w.rain!=null?w.rain+' mm':'—'}</b></span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item">Active alerts: <b>${activeAlerts}</b></span>
+    <span class="sb-sep">|</span>
+    <span class="sb-item">Data feeds: <b>${DB.feedsHealthy}/${feeds.length} operational</b></span>
+  `;
+}
+
+function tickClock(){ renderStatusBar(); }
+setInterval(tickClock, 1000);
+
+/* ---------------------------- GAUGE SVG ---------------------------- */
+function gaugeSvg(score){
+  const r=70, c=2*Math.PI*r, off=c*(1-score/100);
+  const color = score>=75?'var(--teal)':score>=50?'var(--amber)':'var(--red)';
+  return `<svg width="168" height="168" viewBox="0 0 168 168">
+    <circle cx="84" cy="84" r="${r}" stroke="rgba(255,255,255,.08)" stroke-width="14" fill="none"/>
+    <circle cx="84" cy="84" r="${r}" stroke="${color}" stroke-width="14" fill="none"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"
+      style="transition:stroke-dashoffset 1s ease"/>
+  </svg>`;
+}
+function statusLabel(score){ return score>=80?'GOOD': score>=60?'FAIR': score>=40?'POOR':'CRITICAL'; }
+
+/* ---------------------------- HOME VIEW ---------------------------- */
+function renderHome(){
+  const el = document.getElementById('view-home'); if(!el) return;
+  const c = DB.civic;
+  const catColors = {'Road Safety':'var(--blue)','Traffic':'var(--amber)','Environment':'var(--teal)','Infrastructure':'var(--grape)','Citizen Reports':'var(--red)'};
+  const w = DB.weather||{};
+  const trend = c.score>=c.prevScore ? `<span class="trend-down">▲ ${(c.score-c.prevScore).toFixed(0)} vs earlier</span>` : `<span class="trend-up">▼ ${(c.prevScore-c.score).toFixed(0)} vs earlier</span>`;
+
+  el.innerHTML = `
+    <div class="hero">
+      <div class="eyebrow">SEE THE CITY · UNDERSTAND THE SIGNALS · ACT ON WHAT MATTERS</div>
+      <h1>CITYPULSE</h1>
+      <div class="tag">Your City. One Pulse.</div>
+      <p>Real-time civic problems. Smarter responses. AI-powered civic intelligence that turns live city signals into understandable actions.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="go('map')">Explore Live Map</button>
+        <button class="btn btn-ghost" onclick="go('report')">Report an Issue</button>
+        <button class="btn btn-ghost" onclick="go('ask')">Ask CityPulse</button>
+      </div>
+    </div>
+
+    <div class="grid g2" style="align-items:start;margin-bottom:20px">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div>
+            <div class="eyebrow">CityPulse Composite Indicator</div>
+            <div class="section-title">City Health Right Now</div>
+          </div>
+          <div class="demotoggle">
+            <span style="font-size:12.5px;color:var(--txt-dim)">Demo Mode</span>
+            <div class="switch ${DB.demoMode?'on':''}" id="demoSwitch"><div class="knob"></div></div>
+          </div>
+        </div>
+        <div class="gaugewrap">
+          <div class="gauge">
+            ${gaugeSvg(c.score)}
+            <div class="gauge-num"><span class="n">${c.score}</span><span class="of">/ 100 · ${statusLabel(c.score)}</span></div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            ${Object.entries(c.cats).map(([k,v])=>`
+              <div class="catbar-row">
+                <span class="lbl">${k}</span>
+                <div class="catbar-track"><div class="catbar-fill" style="width:${v}%;background:${catColors[k]}"></div></div>
+                <span class="val">${v}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:12.5px;color:var(--txt-faint)">${trend} — this is a CityPulse composite indicator based on available signals, not an official government rating.</div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Live Activity</div>
+        <div class="section-title" style="margin-bottom:14px">What's happening right now</div>
+        <div id="activityFeed"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Real-Time City Status</div>
+    <div class="section-sub">Every card shows its current value, trend, timestamp and data source.</div>
+    <div class="grid g3" id="statusCards" style="margin-bottom:26px"></div>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="section-title">Latest Insight</div>
+        <div class="section-sub">From Possible Links — patterns detected across independent signals.</div>
+        <div id="homeInsight"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="go('links')">View all Possible Links →</button>
+      </div>
+      <div class="card">
+        <div class="section-title">Active Alerts</div>
+        <div class="section-sub">Personalized rules watching your city right now.</div>
+        <div id="homeAlerts"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="go('alerts')">Manage alerts →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('demoSwitch').onclick = toggleDemoMode;
+  renderActivityFeed();
+  renderStatusCards();
+  renderHomeInsight();
+  renderHomeAlerts();
+}
+
+function renderActivityFeed(){
+  const el = document.getElementById('activityFeed'); if(!el) return;
+  el.innerHTML = DB.activity.slice(0,8).map(a=>`
+    <div class="activity-item">
+      <span class="t">${a.t}</span>
+      <span class="dot" style="background:${a.color}"></span>
+      <span>${a.text}</span>
+    </div>`).join('');
+}
+function pushActivity(text,color){
+  DB.activity.unshift({t:nowStr(),text,color});
+  DB.activity = DB.activity.slice(0,40);
+  renderActivityFeed();
+}
+
+function renderStatusCards(){
+  const el = document.getElementById('statusCards'); if(!el) return;
+  const w = DB.weather||{};
+  const traffic = Math.round(30 + Math.sin(Date.now()/90000)*15 + rand(-3,3));
+  const aqi = DB.aq ? DB.aq.aqi : (DB.hourly ? DB.hourly.aqi[DB.hourly.aqi.length-1] : 82);
+  const cards = [
+    {label:'WEATHER', value:(w.temp??'—')+'°C', meta:(w.condition||'—')+` · Rain probability ${w.rainProb??'—'}%`, src: DB.weatherSource==='LIVE'?'src-live':'src-sim', srcLabel:(DB.weatherSource==='LIVE'?'LIVE — Open-Meteo':'SIMULATED — Demo Feed'), trend:'flat'},
+    {label:'TRAFFIC', value: traffic>55?'Heavy':traffic>35?'Moderate':'Light', meta:`+${traffic}% delay vs baseline`, src:'src-delay', srcLabel:'DELAYED — Traffic Feed', trend: traffic>45?'up':'down'},
+    {label:'AIR QUALITY', value:'AQI '+aqi, meta:(aqi>150?'Unhealthy':aqi>100?'Unhealthy for sensitive groups':aqi>50?'Moderate':'Good')+(DB.aq&&DB.aq.pm25!=null?' · PM2.5 '+DB.aq.pm25+' µg/m³':''), src:DB.aq?'src-live':'src-sim', srcLabel:DB.aq?'LIVE — Open-Meteo Air Quality':'SIMULATED — Demo Feed', trend: aqi>100?'up':'flat'},
+    {label:'ACTIVE HAZARDS', value:DB.hazards.length, meta:'Detected across all zones', src:'src-ai', srcLabel:'AI DETECTION — CityPulse Vision', trend:'flat'},
+    {label:'CITIZEN REPORTS', value:DB.reports.length+' today', meta: DB.reports.filter(r=>r.status==='VERIFIED').length+' verified', src:'src-user', srcLabel:'USER REPORT — CityPulse', trend:'up'},
+    {label:'ACTIVE ALERTS', value:DB.alerts.filter(a=>a.status==='ACTIVE'||a.status==='TRIGGERED').length, meta: DB.alerts.filter(a=>a.status==='TRIGGERED').length+' triggered', src:'src-sim', srcLabel:'CityPulse Alert Engine', trend:'flat'},
+  ];
+  el.innerHTML = cards.map(c=>`
+    <div class="card statcard card-tight">
+      <div class="top">
+        <span class="label">${c.label}</span>
+        <span class="source-tag ${c.src}"><span class="d"></span>${c.srcLabel.split(' — ')[0]}</span>
+      </div>
+      <div class="value">${c.value}</div>
+      <div class="meta"><span class="trend-${c.trend}">${c.trend==='up'?'▲':c.trend==='down'?'▼':'●'}</span> ${c.meta}</div>
+      <div class="meta" style="margin-top:5px">Source: ${c.srcLabel} · ${nowStr()}</div>
+    </div>`).join('');
+}
+
+function renderHomeInsight(){
+  const el = document.getElementById('homeInsight'); if(!el) return;
+  const i = DB.insights[0];
+  el.innerHTML = insightCardHtml(i, true);
+}
+function renderHomeAlerts(){
+  const el = document.getElementById('homeAlerts'); if(!el) return;
+  el.innerHTML = DB.alerts.slice(0,3).map(a=>`
+    <div class="activity-item">
+      <span class="dot" style="background:${a.status==='TRIGGERED'?'var(--red)':a.status==='ACTIVE'?'var(--teal)':'var(--txt-faint)'}"></span>
+      <span style="flex:1">${a.type} · ${a.location} <span style="color:var(--txt-faint)">— ${a.condition}</span></span>
+      <span class="pill ${a.status==='TRIGGERED'?'pill-bad':a.status==='ACTIVE'?'pill-good':'pill-info'}">${a.status}</span>
+    </div>`).join('');
+}
+
+function insightCardHtml(i, compact){
+  return `
+  <div class="${compact?'':'card'}" style="${compact?'':'margin-bottom:16px'}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px">
+      <span class="pill pill-info">${i.title}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--txt-faint)">${i.confidence}% confidence</span>
+    </div>
+    <div style="font-size:14px;margin-bottom:8px">${i.text}</div>
+    <div style="font-size:12px;color:var(--txt-faint);margin-bottom:10px">
+      Zone ${i.zone} · ${i.window} · Correlation: ${i.correlation}
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      ${i.signals.map(s=>`<span class="source-tag src-sim"><span class="d"></span>${s}</span>`).join('')}
+    </div>
+    <details>
+      <summary style="cursor:pointer;color:var(--teal);font-size:12.5px;font-weight:600">WHY AM I SEEING THIS?</summary>
+      <div style="margin-top:10px">
+        ${i.evidence.map(e=>`<div class="evidence-row"><span style="color:var(--txt-dim)">${e}</span></div>`).join('')}
+        <div style="margin-top:10px;font-size:11.5px;color:var(--txt-faint);font-style:italic">This is a possible correlation based on available civic data, not a confirmed cause.</div>
+      </div>
+    </details>
+  </div>`;
+}
+
+/* ---------------------------- LIVE MAP VIEW ---------------------------- */
+const MARKER_META = {
+  'Open Manhole':{color:'#EF5350', emoji:'🔴'}, 'Pothole':{color:'#F0A83D', emoji:'🟠'},
+  'Traffic':{color:'#4C82FF', emoji:'🔵'}, 'Waterlogging':{color:'#4CC3FF', emoji:'💧'},
+  'Garbage':{color:'#19C7AE', emoji:'🟢'}, 'Streetlight':{color:'#9B7BFF', emoji:'🟣'},
+  'AI Hazard':{color:'#EF5350', emoji:'⚠️'}, 'Weather':{color:'#4C82FF', emoji:'🌧️'},
+  'Citizen Report':{color:'#F0D43D', emoji:'🟡'}
+};
+let mapInitialized=false;
+function renderMapView(){
+  const el = document.getElementById('view-map'); if(!el) return;
+  // renderAll() rebuilds #mapel. A Leaflet map cannot be reused after its
+  // original DOM node has been replaced, so clean up the old instance first.
+  if(map){
+    try{ map.remove(); }catch(e){}
+    map = null;
+    markerLayers = {};
+    mapInitialized = false;
+    infoPanelMarker = null;
+  }
+  el.innerHTML = `
+    <div class="eyebrow">LIVE MAP</div>
+    <h1 class="pagetitle">${DB.loc.name}</h1>
+    <p class="pagesub">Real streets and geography via OpenStreetMap, layered with live weather and simulated civic signals.</p>
+    <div class="map-layout">
+      <div class="card filter-panel">
+        <div class="filter-group">
+          <h4>Data Type</h4>
+          <div id="typeFilters"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Time</h4>
+          <select id="timeFilter" style="width:100%;background:var(--navy2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:8px">
+            <option value="live">Live</option>
+            <option value="1">Last 1 hour</option>
+            <option value="6">Last 6 hours</option>
+            <option value="24" selected>Last 24 hours</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <h4>Severity</h4>
+          <div id="sevFilters"></div>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <div class="map-toolbar">
+          <input id="mapSearch" placeholder="Search sector, street, landmark…"/>
+          <button class="btn btn-ghost btn-sm" onclick="map.locate({setView:true,maxZoom:15})">📍 Locate me</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleFullscreen()">⛶ Full screen</button>
+        </div>
+        <div id="mapel"></div>
+        <div class="legend-float">
+          ${Object.entries(MARKER_META).map(([k,v])=>`<div class="li"><span>${v.emoji}</span><span>${k}</span></div>`).join('')}
+        </div>
+        <div class="infopanel" id="infoPanel"></div>
+      </div>
+    </div>
+  `;
+  const types = Object.keys(MARKER_META);
+  document.getElementById('typeFilters').innerHTML = types.map(t=>`
+    <label class="chk-row"><input type="checkbox" checked data-type="${t}" onchange="plotHazardsOnMap()"> ${MARKER_META[t].emoji} ${t}</label>`).join('');
+  document.getElementById('sevFilters').innerHTML = ['Low','Medium','High','Critical'].map(s=>`
+    <label class="chk-row"><input type="checkbox" checked data-sev="${s.toUpperCase()}" onchange="plotHazardsOnMap()"> ${s}</label>`).join('');
+  document.getElementById('timeFilter').onchange = plotHazardsOnMap;
+  document.getElementById('mapSearch').addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ const z = ZONE_OFFSETS.find(z=>z.zone.toLowerCase().includes(e.target.value.toLowerCase()));
+      if(z && map) map.setView([DB.loc.lat+z.dy, DB.loc.lon+z.dx], 15);
+    }
+  });
+}
+function toggleFullscreen(){
+  const elm = document.getElementById('mapel');
+  if(!document.fullscreenElement) elm.requestFullscreen?.(); else document.exitFullscreen?.();
+}
+document.addEventListener('fullscreenchange', ()=>{
+  setTimeout(()=>map && map.invalidateSize(true),100);
+});
+function initMapIfNeeded(){
+  const elm = document.getElementById('mapel');
+  if(!elm) return;
+  if(typeof L === 'undefined'){
+    console.error('Leaflet failed to load. Check your internet connection/CDN access.');
+    elm.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#9AA6C8;font-size:13px;padding:20px;text-align:center">Map library could not load.<br>Check your internet connection and reload the page.</div>';
+    return;
+  }
+  if(mapInitialized && map && map.getContainer()===elm){
+    setTimeout(()=>map.invalidateSize(true),0);
+    return;
+  }
+
+  if(map){
+    try{ map.remove(); }catch(e){}
+    map = null;
+  }
+  markerLayers = {};
+  mapInitialized = false;
+
+  map = L.map(elm, {zoomControl:true, preferCanvas:true}).setView([DB.loc.lat, DB.loc.lon], 14);
+
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19,
+    attribution:'&copy; OpenStreetMap contributors',
+    crossOrigin:true
+  }).addTo(map);
+
+  osm.on('tileerror', e => console.warn('OpenStreetMap tile failed:', e));
+
+  markerLayers.group = L.layerGroup().addTo(map);
+  mapInitialized = true;
+
+  // Hidden tabs and freshly rendered containers can report the wrong size.
+  setTimeout(()=>map && map.invalidateSize(true),0);
+  setTimeout(()=>map && map.invalidateSize(true),150);
+
+  plotHazardsOnMap();
+}
+function severityFromLabel(s){ return (s||'').toUpperCase(); }
+function makeDivIcon(emoji){
+  return L.divIcon({className:'cp-marker', html:`<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))">${emoji}</div>`, iconSize:[26,26], iconAnchor:[13,13]});
+}
+function plotHazardsOnMap(){
+  if(!map) return;
+  markerLayers.group.clearLayers();
+  const typeChecks = [...document.querySelectorAll('#typeFilters input')].filter(i=>i.checked).map(i=>i.dataset.type);
+  const sevChecks = [...document.querySelectorAll('#sevFilters input')].filter(i=>i.checked).map(i=>i.dataset.sev);
+  const timeVal = document.getElementById('timeFilter')?.value || '24';
+  const maxAge = timeVal==='live'?15: parseInt(timeVal)*60;
+
+  DB.hazards.forEach(h=>{
+    if(!typeChecks.includes(h.type)) return;
+    if(!sevChecks.includes(h.severity)) return;
+    if(h.detectedMinsAgo>maxAge) return;
+    const meta = MARKER_META[h.type]||{emoji:'⚠️'};
+    const m = L.marker([h.lat,h.lon], {icon:makeDivIcon(meta.emoji)}).addTo(markerLayers.group);
+    m.on('click', ()=> showInfoPanel(h));
+  });
+  DB.reports.forEach(r=>{
+    if(!typeChecks.includes('Citizen Report')) return;
+    const m = L.marker([r.lat,r.lon], {icon:makeDivIcon('🟡')}).addTo(markerLayers.group);
+    m.on('click', ()=> showInfoPanel({type:'Citizen Report — '+r.type, zone:r.zone, severity:'MEDIUM', confidence:'—',
+      reports:1, detectedMinsAgo: (24-r.hour)*60, source:'Citizen Report', id:r.id, status:r.status}));
+  });
+}
+function showInfoPanel(h){
+  const el = document.getElementById('infoPanel'); if(!el) return;
+  el.innerHTML = `
+  <div class="card" style="padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div class="section-title" style="font-size:15px;margin-bottom:2px">${(h.type||'').toUpperCase()}</div>
+      <button onclick="document.getElementById('infoPanel').innerHTML=''" style="background:none;border:none;color:var(--txt-faint);cursor:pointer;font-size:16px">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--txt-faint);margin-bottom:10px">Location: ${h.zone||'—'}</div>
+    <div class="evidence-row"><span>AI Confidence</span><b>${h.confidence!=='—'?h.confidence+'%':'—'}</b></div>
+    <div class="evidence-row"><span>Severity</span><span class="pill ${h.severity==='CRITICAL'||h.severity==='HIGH'?'pill-bad':h.severity==='MEDIUM'?'pill-warn':'pill-good'}">${h.severity}</span></div>
+    <div class="evidence-row"><span>Citizen Reports</span><b>${h.reports??'—'}</b></div>
+    <div class="evidence-row"><span>Weather</span><b>${DB.weather?DB.weather.condition:'—'}</b></div>
+    <div class="evidence-row"><span>Detected</span><b>${h.detectedMinsAgo} min ago</b></div>
+    <div style="margin:10px 0"><span class="source-tag src-ai"><span class="d"></span>${h.source||'CityPulse'}</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="go('links')">View Details</button>
+      <button class="btn btn-ghost btn-sm" onclick="go('report')">Report Issue</button>
+      <button class="btn btn-ghost btn-sm" onclick="go('alerts')">Create Alert</button>
+    </div>
+  </div>`;
+}
+
+/* ---------------------------- POSSIBLE LINKS VIEW ---------------------------- */
+function renderLinksView(){
+  const el = document.getElementById('view-links'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">CITYPULSE INTELLIGENCE</div>
+    <h1 class="pagetitle">Possible Links</h1>
+    <p class="pagesub">Patterns detected across independent city signals. These are possible correlations based on available civic data, not confirmed causation.</p>
+    <div class="card" style="margin-bottom:24px">
+      <div class="section-title">Zone 4</div>
+      <div class="section-sub">Heavy rainfall → waterlogging → traffic delay</div>
+      <div class="linkchain">
+        <div class="lc-node">🌧️ Heavy rainfall detected</div>
+        <div class="lc-arrow">↓</div>
+        <div class="lc-node">💧 Waterlogging reports increased 65%</div>
+        <div class="lc-arrow">↓</div>
+        <div class="lc-node">🚗 Traffic delays increased 42%</div>
+        <div class="lc-arrow">↓</div>
+        <div class="lc-node" style="border-color:var(--teal);color:var(--teal)">⚠️ Possible Localized Disruption</div>
+      </div>
+      <div class="divider"></div>
+      <div class="grid g3">
+        <div><div class="label" style="font-size:11.5px;color:var(--txt-faint)">FEEDS INVOLVED</div><div style="margin-top:6px">Weather, Citizen Reports, Traffic</div></div>
+        <div><div class="label" style="font-size:11.5px;color:var(--txt-faint)">TIME WINDOW</div><div style="margin-top:6px">Last 60 minutes</div></div>
+        <div><div class="label" style="font-size:11.5px;color:var(--txt-faint)">CORRELATION / CONFIDENCE</div><div style="margin-top:6px">Moderate · 72%</div></div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--txt-faint);font-style:italic">This is a possible correlation based on available civic data, not a confirmed cause.</div>
+    </div>
+    <div class="section-title">All Detected Patterns</div>
+    <div class="section-sub">Every insight lists its evidence, geographic area, data sources and confidence.</div>
+    <div id="allInsights"></div>
+  `;
+  document.getElementById('allInsights').innerHTML = DB.insights.map(i=>insightCardHtml(i,false)).join('');
+}
+
+/* ---------------------------- LAST 24 HOURS VIEW ---------------------------- */
+function renderHoursView(){
+  const el = document.getElementById('view-hours'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">ANALYTICS</div>
+    <h1 class="pagetitle">Last 24 Hours</h1>
+    <p class="pagesub">Hover any chart for time, value, change and source. Filter by zone, data type, severity or time.</p>
+    <div class="chiprow" style="margin-bottom:20px" id="hoursFilters">
+      ${['All Zones',...ZONE_OFFSETS.map(z=>z.zone)].map((z,idx)=>`<span class="chip ${idx===0?'sel':''}" data-z="${z}">${z}</span>`).join('')}
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="section-title" style="font-size:15px">Weather — Temperature &amp; Rainfall</div><canvas id="chWeather" height="180"></canvas></div>
+      <div class="card"><div class="section-title" style="font-size:15px">Traffic — Hourly Congestion</div><canvas id="chTraffic" height="180"></canvas></div>
+      <div class="card"><div class="section-title" style="font-size:15px">Citizen Reports by Hour</div><canvas id="chReports" height="180"></canvas></div>
+      <div class="card"><div class="section-title" style="font-size:15px">Hazards Detected Over Time</div><canvas id="chHazards" height="180"></canvas></div>
+      <div class="card"><div class="section-title" style="font-size:15px">Air Quality (AQI) Timeline</div><canvas id="chAqi" height="180"></canvas></div>
+      <div class="card"><div class="section-title" style="font-size:15px">Civic Health — 24h Trend</div><canvas id="chCivic" height="180"></canvas></div>
+    </div>
+  `;
+  document.querySelectorAll('#hoursFilters .chip').forEach(c=> c.onclick = ()=>{
+    document.querySelectorAll('#hoursFilters .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel');
+  });
+}
+function chartBase(labels){
+  return { labels, options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#9AA6C8',font:{size:10.5}}},
+      tooltip:{backgroundColor:'#0F1A3D',borderColor:'#233066',borderWidth:1,titleColor:'#EAF0FF',bodyColor:'#9AA6C8'}},
+    scales:{ x:{ticks:{color:'#6C7699',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+             y:{ticks:{color:'#6C7699',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}} }
+  }};
+}
+function renderHoursCharts(){
+  if(!DB.hourly) return;
+  const labels = DB.hourLabels || Array.from({length:24},(_,i)=>pad(i)+':00');
+  const mk = (id,datasets,type='line')=>{
+    if(charts[id]) charts[id].destroy();
+    const ctx = document.getElementById(id); if(!ctx) return;
+    const base = chartBase(labels);
+    charts[id] = new Chart(ctx, {type, data:{labels, datasets}, options:base.options});
+  };
+  mk('chWeather',[
+    {label:'Temp (°C)', data:DB.hourly.temp, borderColor:'#F0A83D', backgroundColor:'rgba(240,168,61,.1)', tension:.35, yAxisID:'y'},
+    {label:'Rain (mm)', data:DB.hourly.rain, borderColor:'#4C82FF', backgroundColor:'rgba(76,130,255,.15)', tension:.35, fill:true, yAxisID:'y'}
+  ]);
+  mk('chTraffic',[{label:'Congestion %', data:DB.hourly.traffic, borderColor:'#EF5350', backgroundColor:'rgba(239,83,80,.15)', fill:true, tension:.3}]);
+  mk('chReports',[{label:'Cumulative reports', data:DB.hourly.reports, backgroundColor:'#4C82FF'}], 'bar');
+  mk('chHazards',[{label:'Hazards', data:DB.hourly.reports.map(v=>Math.round(v*0.4)), backgroundColor:'#9B7BFF'}], 'bar');
+  mk('chAqi',[{label:'AQI', data:DB.hourly.aqi, borderColor:'#9B7BFF', backgroundColor:'rgba(155,123,255,.15)', fill:true, tension:.3}]);
+  mk('chCivic',[{label:'Civic Health', data:DB.hourly.civic, borderColor:'#19C7AE', backgroundColor:'rgba(25,199,174,.15)', fill:true, tension:.35}]);
+}
+
+/* ---------------------------- REPLAY VIEW ---------------------------- */
+let replayHour=0, replayPlaying=false, replaySpeed=1, replayTimer=null;
+function renderReplayView(){
+  const el = document.getElementById('view-replay'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">REPLAY CITY</div>
+    <h1 class="pagetitle">Replay the last 24 hours</h1>
+    <p class="pagesub">Scrub through the day to see how weather, reports, traffic and the Civic Health Score evolved.</p>
+    <div class="card">
+      <div class="replaybar">
+        <button class="btn btn-ghost btn-sm" onclick="replayStep(-1)">|&lt; Prev</button>
+        <button class="btn btn-primary btn-sm" id="replayPlayBtn" onclick="replayToggle()">▶ Play</button>
+        <button class="btn btn-ghost btn-sm" onclick="replayStep(1)">Next &gt;|</button>
+        <div class="speedbtns">
+          ${[0.5,1,2,5].map(s=>`<button data-s="${s}" class="${s===1?'sel':''}" onclick="setReplaySpeed(${s},this)">${s}×</button>`).join('')}
+        </div>
+      </div>
+      <input type="range" min="0" max="23" value="0" class="replay-slider" id="replaySlider" oninput="replaySeek(this.value)">
+      <div class="timeline-marks"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+      <div class="divider"></div>
+      <div class="grid g4" id="replayStats"></div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <div class="section-title" style="font-size:15px">City Event Summary</div>
+      <div id="replaySummary" style="color:var(--txt-dim);font-size:13.5px;line-height:1.6;margin-top:8px">Play the replay to build today's event summary.</div>
+    </div>
+  `;
+}
+function initReplay(){ replayHour=0; replayPlaying=false; renderReplayFrame(); }
+function replaySeek(v){ replayHour=parseInt(v); renderReplayFrame(); }
+function replayStep(d){ replayHour=clamp(replayHour+d,0,23); document.getElementById('replaySlider').value=replayHour; renderReplayFrame(); }
+function setReplaySpeed(s,btn){ replaySpeed=s; document.querySelectorAll('.speedbtns button').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); }
+function replayToggle(){
+  replayPlaying = !replayPlaying;
+  document.getElementById('replayPlayBtn').textContent = replayPlaying? 'Ⅱ Pause':'▶ Play';
+  if(replayPlaying){
+    replayTimer = setInterval(()=>{
+      replayHour++;
+      if(replayHour>23){ replayHour=23; replayToggle(); return; }
+      document.getElementById('replaySlider').value=replayHour;
+      renderReplayFrame();
+    }, 900/replaySpeed);
+  } else clearInterval(replayTimer);
+}
+function renderReplayFrame(){
+  if(!DB.hourly) return;
+  const h = replayHour;
+  const el = document.getElementById('replayStats'); if(!el) return;
+  el.innerHTML = `
+    <div class="statcard card card-tight"><div class="label">Time</div><div class="value" style="font-size:20px">${(DB.hourLabels||[])[h]||pad(h)+':00'}</div></div>
+    <div class="statcard card card-tight"><div class="label">Weather</div><div class="value" style="font-size:20px">${DB.hourly.temp[h]}°C</div><div class="meta">Rain ${DB.hourly.rain[h]} mm</div></div>
+    <div class="statcard card card-tight"><div class="label">Traffic</div><div class="value" style="font-size:20px">${DB.hourly.traffic[h]}%</div><div class="meta">delay vs baseline</div></div>
+    <div class="statcard card card-tight"><div class="label">Civic Health</div><div class="value" style="font-size:20px">${DB.hourly.civic[h]}</div><div class="meta">${DB.hourly.reports[h]} reports so far</div></div>
+  `;
+  if(h>=20 && DB.hourly.rain[h]>6){
+    document.getElementById('replaySummary').textContent = `During the selected period, rainfall increased to ${DB.hourly.rain[h]} mm/h while citizen reports rose to ${DB.hourly.reports[h]} and traffic delay reached ${DB.hourly.traffic[h]}%. This is a detected pattern, not proof of causation.`;
+  }
+}
+
+/* ---------------------------- GET ALERTS VIEW ---------------------------- */
+function renderAlertsView(){
+  const el = document.getElementById('view-alerts'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">ALERT MANAGEMENT</div>
+    <h1 class="pagetitle">Get Alerts</h1>
+    <p class="pagesub">Create personalized alerts and CityPulse will watch the relevant feeds for you.</p>
+    <div class="grid g2" style="align-items:start">
+      <div class="card">
+        <div class="section-title" style="font-size:16px">Create Alert</div>
+        <div class="field"><label>Location</label>
+          <select id="alLoc">${ZONE_OFFSETS.map(z=>`<option>${z.zone}</option>`).join('')}</select>
+        </div>
+        <div class="field"><label>Alert Type</label>
+          <select id="alType"><option>Traffic</option><option>Weather</option><option>Flooding</option><option>AI Hazard</option><option>Citizen Reports</option><option>Air Quality</option></select>
+        </div>
+        <div class="field"><label>Condition</label>
+          <select id="alCond"><option>Traffic delay &gt; 40%</option><option>Rainfall &gt; 10 mm/hour</option><option>AQI &gt; 150</option><option>High-severity hazard detected</option></select>
+        </div>
+        <div class="field"><label>Delivery</label>
+          <div class="chiprow">
+            <label class="chk-row"><input type="checkbox" checked id="dIn"> In-app</label>
+            <label class="chk-row"><input type="checkbox" id="dEm"> Email</label>
+            <label class="chk-row"><input type="checkbox" id="dBr"> Browser notification</label>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="createAlert()">Create Alert</button>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:16px">Your Alerts</div>
+        <div class="chiprow" style="margin-bottom:14px">
+          <span class="chip sel" data-f="ALL">All</span><span class="chip" data-f="ACTIVE">Active</span>
+          <span class="chip" data-f="PAUSED">Paused</span><span class="chip" data-f="TRIGGERED">Triggered</span>
+        </div>
+        <div id="alertsList"></div>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('#alertsList').length;
+  el.querySelectorAll('.chiprow .chip').forEach(c=>c.onclick=()=>{
+    el.querySelectorAll('.chiprow .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel');
+    renderAlertsList(c.dataset.f);
+  });
+  renderAlertsList('ALL');
+}
+function renderAlertsList(filter){
+  const el = document.getElementById('alertsList'); if(!el) return;
+  const list = DB.alerts.filter(a=> filter==='ALL' || a.status===filter);
+  if(!list.length){ el.innerHTML = `<div style="color:var(--txt-faint);font-size:13px;padding:16px 0">No alerts in this state.</div>`; return; }
+  el.innerHTML = list.map(a=>`
+    <div class="card card-tight" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <b style="font-size:13.5px">${a.type} · ${a.location}</b>
+        <span class="pill ${a.status==='TRIGGERED'?'pill-bad':a.status==='ACTIVE'?'pill-good':'pill-info'}">${a.status}</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--txt-dim);margin-top:5px">${a.condition}</div>
+      <div style="font-size:11.5px;color:var(--txt-faint);margin-top:6px">Delivery: ${a.delivery.join(', ')}</div>
+      <div style="margin-top:9px;display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="toggleAlertStatus('${a.id}')">${a.status==='PAUSED'?'Resume':'Pause'}</button>
+        <button class="btn btn-ghost btn-sm" onclick="go('map')">View on map</button>
+      </div>
+    </div>`).join('');
+}
+function toggleAlertStatus(id){
+  const a = DB.alerts.find(x=>x.id===id); if(!a) return;
+  a.status = a.status==='PAUSED'?'ACTIVE':'PAUSED';
+  renderAlertsList('ALL');
+}
+function createAlert(){
+  const a = {
+    id:'AL-'+uid(), location:document.getElementById('alLoc').value, type:document.getElementById('alType').value,
+    condition:document.getElementById('alCond').value, status:'ACTIVE',
+    delivery:[document.getElementById('dIn').checked&&'In-app', document.getElementById('dEm').checked&&'Email', document.getElementById('dBr').checked&&'Browser'].filter(Boolean)
+  };
+  DB.alerts.unshift(a);
+  pushActivity(`New alert created — ${a.type} in ${a.location}`, 'var(--blue)');
+  renderAlertsList('ALL');
+}
+
+/* ---------------------------- FEED STATUS VIEW ---------------------------- */
+function renderFeedsView(){
+  const el = document.getElementById('view-feeds'); if(!el) return;
+  const feeds = computeFeeds();
+  const dotColor = s => s==='LIVE'?'var(--teal)':s==='AVAILABLE'?'var(--blue)':s==='DELAYED'?'var(--amber)':'var(--txt-faint)';
+  el.innerHTML = `
+    <div class="eyebrow">SYSTEM TRANSPARENCY</div>
+    <h1 class="pagetitle">Feed Status</h1>
+    <p class="pagesub">Every connected source, honestly labeled. If a feed fails, the rest of CityPulse keeps working.</p>
+    <div class="grid g3">
+      ${feeds.map(f=>`
+        <div class="card feedcard">
+          <div class="fh"><b>${f.name}</b><span class="pill ${f.status==='LIVE'?'pill-good':f.status==='AVAILABLE'?'pill-info':f.status==='DELAYED'?'pill-warn':'pill-info'}"><span class="status-dot" style="background:${dotColor(f.status)}"></span>${f.status}</span></div>
+          <div style="font-size:12.5px;color:var(--txt-dim)">${f.source}</div>
+          <div style="font-size:11.5px;color:var(--txt-faint)">Type: ${f.type}</div>
+          <div style="font-size:11.5px;color:var(--txt-faint)">Updated ${f.updated}</div>
+          <button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-top:4px" onclick="retryFeed('${f.name}')">Retry</button>
+        </div>`).join('')}
+    </div>
+  `;
+}
+function retryFeed(name){
+  if(name==='Weather'){ fetchWeather().then(()=>{ renderFeedsView(); pushActivity('Weather feed retried', 'var(--teal)'); }); }
+  else { pushActivity(`${name} feed retried`, 'var(--amber)'); setTimeout(renderFeedsView,400); }
+}
+
+/* ---------------------------- AI DETECTION VIEW ---------------------------- */
+function renderAiView(){
+  const el = document.getElementById('view-ai'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">AI HAZARD DETECTION</div>
+    <h1 class="pagetitle">Scan a road or street image</h1>
+    <p class="pagesub">Upload a photo and CityPulse Vision will look for hazards. In this demo, detection is a clearly-labeled simulated model, not a live inference service.</p>
+    <div class="grid g2" style="align-items:start">
+      <div class="card">
+        <div class="dropzone" id="dropZone">Drag &amp; drop image here, or click to upload
+          <input type="file" id="fileInput" accept="image/*" style="display:none">
+        </div>
+        <div id="uploadPreview" style="margin-top:16px"></div>
+        <button class="btn btn-primary" style="margin-top:14px" id="scanBtn" disabled onclick="runAiScan()">Scan with AI</button>
+      </div>
+      <div class="card" id="aiResultCard">
+        <div style="color:var(--txt-faint);font-size:13px">Upload an image to see detection results here.</div>
+      </div>
+    </div>
+  `;
+  const dz = document.getElementById('dropZone'), fi = document.getElementById('fileInput');
+  dz.onclick = ()=> fi.click();
+  dz.ondragover = e=>{e.preventDefault(); dz.style.borderColor='var(--teal)';};
+  dz.ondrop = e=>{ e.preventDefault(); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); };
+  fi.onchange = e=> e.target.files[0] && handleFile(e.target.files[0]);
+}
+let uploadedImgURL=null;
+function handleFile(file){
+  uploadedImgURL = URL.createObjectURL(file);
+  document.getElementById('uploadPreview').innerHTML = `<div class="aiframe"><img src="${uploadedImgURL}"></div>`;
+  document.getElementById('scanBtn').disabled=false;
+}
+function runAiScan(){
+  const card = document.getElementById('aiResultCard');
+  const stages = ['Uploading...','Analyzing...','Detecting objects...','Evaluating severity...'];
+  let i=0;
+  card.innerHTML = `<div class="section-title" style="font-size:15px">Running detection</div><div class="progresslog" id="scanLog"></div>`;
+  const logEl = document.getElementById('scanLog');
+  const interval = setInterval(()=>{
+    logEl.innerHTML += `<div>▸ ${stages[i]}</div>`;
+    i++;
+    if(i>=stages.length){ clearInterval(interval); setTimeout(showAiResult,500); }
+  },550);
+}
+function showAiResult(){
+  const conf = Math.round(rand(84,97));
+  const detId = 'DET-'+uid().toUpperCase();
+  const card = document.getElementById('aiResultCard');
+  card.innerHTML = `
+    <div class="section-title" style="font-size:15px">Detection Result</div>
+    <div style="position:relative;display:inline-block;margin:10px 0">
+      <div class="aiframe" style="position:relative">
+        <img src="${uploadedImgURL}">
+        <div class="bbox" style="left:28%;top:32%;width:36%;height:34%"><span class="bbtag">Open Manhole ${conf}%</span></div>
+      </div>
+    </div>
+    <div class="evidence-row"><span>Detected object</span><b>Open Manhole</b></div>
+    <div class="evidence-row"><span>Confidence</span><b>${conf}%</b></div>
+    <div class="confbar"><div class="confbar-fill" style="width:${conf}%"></div></div>
+    <div class="evidence-row"><span>Severity</span><span class="pill pill-bad">HIGH</span></div>
+    <div class="evidence-row"><span>Location</span><b>${DB.loc.name}</b></div>
+    <div class="evidence-row"><span>Timestamp</span><b>${nowStr()}</b></div>
+    <div class="evidence-row"><span>Detection ID</span><b>${detId}</b></div>
+    <div style="margin:10px 0"><span class="source-tag src-ai"><span class="d"></span>SIMULATED — CityPulse Vision demo model</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="addAiDetectionToMap(${conf})">Add to Map</button>
+      <button class="btn btn-ghost btn-sm" onclick="go('alerts')">Create Alert</button>
+      <button class="btn btn-ghost btn-sm" onclick="go('report')">Report Issue</button>
+    </div>
+  `;
+}
+function addAiDetectionToMap(conf){
+  const z = choice(ZONE_OFFSETS);
+  DB.hazards.unshift({id:'HZ-'+uid(), type:'Open Manhole', icon:'🔴', severity:'HIGH', source:'CityPulse Vision (simulated)',
+    zone:z.zone, lat:DB.loc.lat+z.dy, lon:DB.loc.lon+z.dx, confidence:conf, reports:0, detectedMinsAgo:0});
+  pushActivity(`AI hazard detected and added to map — ${z.zone}`, 'var(--grape)');
+  pushNotification('🔴','High-priority hazard','Open manhole detected via AI Detection, added to Live Map.');
+  renderStatusCards();
+  if(map) plotHazardsOnMap();
+}
+
+/* ---------------------------- ASK CITYPULSE VIEW ---------------------------- */
+const ASK_SUGGESTIONS = [
+  "What's happening near Sector 4?","Are there any major hazards nearby?","Why did the Civic Health Score change?",
+  "What areas have increased traffic?","What happened in the last hour?","Is there a possible connection between rainfall and flooding?"
+];
+function renderAskView(){
+  const el = document.getElementById('view-ask'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">CONVERSATIONAL ASSISTANT</div>
+    <h1 class="pagetitle">Ask CityPulse</h1>
+    <p class="pagesub">Ask what's happening in your city. Answers are generated from CityPulse's current data — never invented.</p>
+    <div class="card chatwrap">
+      <div class="suggestrow">${ASK_SUGGESTIONS.map(q=>`<button onclick="askQuestion(\`${q}\`)">${q}</button>`).join('')}</div>
+      <div class="chatlog" id="chatLog"></div>
+      <div class="chatinput">
+        <input id="chatInputEl" placeholder="Ask about your city…" onkeydown="if(event.key==='Enter')askQuestion(this.value)">
+        <button class="btn btn-primary" onclick="askQuestion(document.getElementById('chatInputEl').value)">Send</button>
+      </div>
+    </div>
+  `;
+  if(!document.getElementById('chatLog').dataset.seeded){
+    addChatMsg('bot', "Hi — I'm CityPulse. Ask me about hazards, traffic, weather or why the Civic Health Score changed.", null);
+    document.getElementById('chatLog').dataset.seeded='1';
+  }
+}
+function addChatMsg(who,text,dataUsed){
+  const log = document.getElementById('chatLog'); if(!log) return;
+  const div = document.createElement('div');
+  div.className='msg '+who;
+  div.innerHTML = text + (dataUsed? `<div class="datatag"><span>DATA USED: ${dataUsed.join(', ')}</span><span>LAST UPDATED: ${nowStr()}</span></div>`:'');
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+function askQuestion(q){
+  q = (q||'').trim(); if(!q) return;
+  document.getElementById('chatInputEl').value='';
+  addChatMsg('user', escapeHtml(q));
+  setTimeout(()=> answerQuestion(q), 500);
+}
+function escapeHtml(s){ return s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function answerQuestion(q){
+  const lq = q.toLowerCase();
+  let answer, dataUsed;
+  if(lq.includes('sector 4') || lq.includes('near sector')){
+    const hz = DB.hazards.filter(h=>h.zone==='Sector 4');
+    answer = hz.length ? `Sector 4 currently has ${hz.length} active hazard${hz.length>1?'s':''}, including ${hz[0].type.toLowerCase()} at ${hz[0].confidence}% AI confidence. ${DB.reports.filter(r=>r.zone==='Sector 4').length} citizen reports have been filed in this zone.`
+      : `I don't see any active hazards in Sector 4 right now.`;
+    dataUsed=['Citizen Reports','AI Detection'];
+  } else if(lq.includes('hazard')){
+    const top = [...DB.hazards].sort((a,b)=>b.confidence-a.confidence)[0];
+    answer = top ? `The highest-confidence hazard right now is a ${top.type.toLowerCase()} in ${top.zone} (${top.confidence}% confidence, severity ${top.severity}), detected ${top.detectedMinsAgo} minutes ago.` : `No significant hazards are currently detected.`;
+    dataUsed=['AI Detection','Citizen Reports'];
+  } else if(lq.includes('civic health') || lq.includes('score')){
+    const c = DB.civic;
+    answer = `The Civic Health Score is ${c.score}/100 (${statusLabel(c.score)}), ${c.score>=c.prevScore?'up':'down'} from ${c.prevScore} earlier. The biggest factor is Traffic at ${c.cats['Traffic']}/100. This is a CityPulse composite indicator, not an official rating.`;
+    dataUsed=['Weather','Traffic','Citizen Reports','Environment'];
+  } else if(lq.includes('traffic')){
+    answer = `Traffic delay is currently trending near ${DB.hourly.traffic[DB.hourly.traffic.length-1]}% above baseline, with the most congestion typically reported along Main Road and Sector 4.`;
+    dataUsed=['Traffic Feed'];
+  } else if(lq.includes('last hour') || lq.includes('happened')){
+    answer = `In the last hour: ${DB.activity.slice(0,4).map(a=>a.text.toLowerCase()).join('; ')}.`;
+    dataUsed=['Activity Log'];
+  } else if(lq.includes('rainfall') && (lq.includes('flood')||lq.includes('waterlog'))){
+    const li = DB.insights.find(i=>i.title==='PATTERN DETECTED');
+    answer = li ? `${li.text} Confidence: ${li.confidence}%. This is a possible correlation based on available civic data, not a confirmed cause.` : `I don't have enough current data to answer that confidently.`;
+    dataUsed=['Weather','Citizen Reports'];
+  } else {
+    answer = `I don't have enough current data to answer that confidently. Try asking about hazards, traffic, weather, or the Civic Health Score.`;
+    dataUsed=null;
+  }
+  addChatMsg('bot', answer, dataUsed);
+}
+
+/* ---------------------------- REPORT ISSUE VIEW ---------------------------- */
+const ISSUE_TYPES = ['Open Manhole','Pothole','Flooding','Garbage','Broken Streetlight','Traffic Issue','Other'];
+function renderReportView(){
+  const el = document.getElementById('view-report'); if(!el) return;
+  el.innerHTML = `
+    <div class="eyebrow">CITIZEN REPORTING</div>
+    <h1 class="pagetitle">Report a Civic Issue</h1>
+    <p class="pagesub">Your report is added to the Live Map, Dashboard, Possible Links and Last 24 Hours immediately, and routed to AI verification.</p>
+    <div class="grid g2" style="align-items:start">
+      <div class="card">
+        <div class="field"><label>Upload Photo (optional)</label>
+          <div class="dropzone" id="repDrop">Click to attach a photo<input type="file" id="repFile" accept="image/*" style="display:none"></div>
+          <div id="repPreview"></div>
+        </div>
+        <div class="field"><label>Issue Type</label>
+          <div class="chiprow" id="issueChips">${ISSUE_TYPES.map((t,i)=>`<span class="chip ${i===0?'sel':''}" data-t="${t}">${t}</span>`).join('')}</div>
+        </div>
+        <div class="field"><label>Location</label>
+          <div style="display:flex;gap:8px">
+            <input id="repLoc" placeholder="e.g. Sector 4, Main Road" style="flex:1">
+            <button class="btn btn-ghost btn-sm" onclick="useCurrentLocation()">Use Current Location</button>
+          </div>
+        </div>
+        <div class="field"><label>Description</label><textarea id="repDesc" placeholder="Describe what you saw…"></textarea></div>
+        <button class="btn btn-primary" onclick="submitReport()">Submit Report</button>
+      </div>
+      <div class="card" id="reportResult">
+        <div style="color:var(--txt-faint);font-size:13px">Your submission confirmation will appear here.</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('repDrop').onclick = ()=> document.getElementById('repFile').click();
+  document.getElementById('repFile').onchange = e=>{
+    if(e.target.files[0]) document.getElementById('repPreview').innerHTML = `<div class="aiframe" style="margin-top:8px"><img src="${URL.createObjectURL(e.target.files[0])}" style="max-height:160px"></div>`;
+  };
+  document.querySelectorAll('#issueChips .chip').forEach(c=> c.onclick=()=>{ document.querySelectorAll('#issueChips .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
+}
+function useCurrentLocation(){
+  document.getElementById('repLoc').value = choice(ZONE_OFFSETS).zone;
+}
+function submitReport(){
+  const type = document.querySelector('#issueChips .chip.sel')?.dataset.t || 'Other';
+  const loc = document.getElementById('repLoc').value || choice(ZONE_OFFSETS).zone;
+  const desc = document.getElementById('repDesc').value;
+  DB.reportCounter++;
+  const id = 'CP-2026-'+DB.reportCounter;
+  const z = ZONE_OFFSETS.find(z=>z.zone===loc) || choice(ZONE_OFFSETS);
+  const rep = {id, type, zone:loc, lat:DB.loc.lat+z.dy, lon:DB.loc.lon+z.dx, status:'UNDER AI VERIFICATION', hour:new Date().getHours(), desc};
+  DB.reports.unshift(rep);
+  pushActivity(`New citizen report received — ${loc}`, 'var(--blue)');
+  renderStatusCards(); if(map) plotHazardsOnMap();
+  const card = document.getElementById('reportResult');
+  card.innerHTML = `
+    <div class="pill pill-good" style="margin-bottom:10px">Report submitted successfully</div>
+    <div class="section-title" style="font-size:16px">${id}</div>
+    <div class="evidence-row"><span>Type</span><b>${type}</b></div>
+    <div class="evidence-row"><span>Location</span><b>${loc}</b></div>
+    <div class="evidence-row"><span>Status</span><span class="pill pill-info" id="repStatusPill">UNDER AI VERIFICATION</span></div>
+    <div style="margin-top:10px;font-size:12px;color:var(--txt-faint)">This report now appears on the Live Map, Dashboard, Possible Links and Last 24 Hours.</div>
+  `;
+  setTimeout(()=>{
+    rep.status = Math.random()>0.25 ? 'VERIFIED':'NEEDS REVIEW';
+    const pill = document.getElementById('repStatusPill');
+    if(pill){ pill.textContent=rep.status; pill.className='pill '+(rep.status==='VERIFIED'?'pill-good':'pill-warn'); }
+    pushActivity(`Report ${id} ${rep.status.toLowerCase()}`, rep.status==='VERIFIED'?'var(--teal)':'var(--amber)');
+  }, 3000);
+}
+
+/* ---------------------------- NOTIFICATIONS / TOASTS ---------------------------- */
+function pushNotification(emoji,title,body){
+  DB.notifications.unshift({emoji,title,body,t:nowStr()});
+  updateNotifBadge();
+  showToast(emoji,title,body);
+  renderNotifDrawer();
+}
+function updateNotifBadge(){
+  const b = document.getElementById('notifBadge'); if(!b) return;
+  const n = DB.notifications.length;
+  b.style.display = n? 'flex':'none'; b.textContent = n>9?'9+':n;
+}
+function showToast(emoji,title,body){
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div'); t.className='toast';
+  t.innerHTML = `<div class="th"><span>${emoji} ${title}</span><button class="tx" onclick="this.closest('.toast').remove()">✕</button></div><div class="tb">${body}</div>`;
+  stack.appendChild(t);
+  setTimeout(()=> t.remove(), 7000);
+}
+function toggleNotifDrawer(){
+  const d = document.getElementById('notifDrawer'), s = document.getElementById('scrim');
+  const open = !d.classList.contains('open');
+  d.classList.toggle('open', open); s.classList.toggle('show', open);
+  if(open) renderNotifDrawer();
+}
+document.getElementById('scrim').onclick = ()=>{ document.getElementById('notifDrawer').classList.remove('open'); document.getElementById('scrim').classList.remove('show'); };
+function renderNotifDrawer(){
+  const d = document.getElementById('notifDrawer'); if(!d) return;
+  d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <b style="font-family:var(--disp);font-size:17px">Notifications</b>
+      <button onclick="toggleNotifDrawer()" style="background:none;border:none;color:var(--txt-faint);font-size:18px;cursor:pointer">✕</button>
+    </div>`
+    + (DB.notifications.length? DB.notifications.map(n=>`
+        <div class="notif-item"><span>${n.emoji}</span><div><b style="font-size:12.5px">${n.title}</b><div style="color:var(--txt-dim);font-size:12px;margin-top:2px">${n.body}</div><div style="color:var(--txt-faint);font-size:10.5px;margin-top:3px">${n.t}</div></div></div>
+      `).join('') : `<div style="color:var(--txt-faint);font-size:13px">No notifications yet.</div>`);
+}
+
+/* ---------------------------- TRUST MODAL ---------------------------- */
+function openTrustModal(){
+  const items = [
+    'Data sources are identified','Live and simulated data are clearly separated','Missing feeds are displayed',
+    'Timestamps are shown','AI confidence is shown','Correlations are described as possible links',
+    'Correlation is not presented as causation','Personal identifying information is not publicly displayed','AI-generated conclusions are explainable'
+  ];
+  const w = window.open('','_blank','width=520,height=640');
+  w.document.write(`<html><head><title>How CityPulse Stays Honest</title>
+    <style>body{background:#080D1F;color:#EAF0FF;font-family:Inter,sans-serif;padding:28px}h1{font-family:'Space Grotesk',sans-serif}li{margin-bottom:10px;color:#9AA6C8}</style>
+    </head><body><h1>How CityPulse Stays Honest</h1><ul>${items.map(i=>`<li>✓ ${i}</li>`).join('')}</ul></body></html>`);
+}
+
+/* ---------------------------- DEMO MODE ---------------------------- */
+function toggleDemoMode(){
+  DB.demoMode = !DB.demoMode;
+  document.getElementById('demoSwitch')?.classList.toggle('on', DB.demoMode);
+  if(DB.demoMode) runDemoSequence();
+}
+function runDemoSequence(){
+  const steps = [
+    ()=>{ pushActivity('DEMO: Heavy rainfall detected in Zone 4', 'var(--blue)'); },
+    ()=>{ pushActivity('DEMO: Waterlogging reports increasing in Zone 4', 'var(--blue)');
+      DB.reports.unshift({id:'CP-2026-'+(++DB.reportCounter), type:'Flooding', zone:'Zone 4', lat:DB.loc.lat+0.01, lon:DB.loc.lon+0.02, status:'VERIFIED', hour:new Date().getHours()});
+      renderStatusCards(); },
+    ()=>{ pushActivity('DEMO: Traffic delay increasing in Zone 4', 'var(--amber)'); },
+    ()=>{ pushActivity('DEMO: AI detected a possible relationship', 'var(--grape)');
+      pushNotification('🟡','Possible pattern detected','Rainfall, waterlogging and traffic signals correlate in Zone 4.'); },
+    ()=>{ DB.civic.prevScore = DB.civic.score; DB.civic.score = clamp(DB.civic.score-9,0,100); DB.civic.cats['Traffic']=clamp(DB.civic.cats['Traffic']-14,0,100);
+      pushActivity('DEMO: Civic Health Score decreased', 'var(--red)'); if(currentView==='home') renderHome(); },
+    ()=>{ const al={id:'AL-'+uid(),location:'Zone 4',type:'Flooding',condition:'Rainfall > 10 mm/hour',status:'TRIGGERED',delivery:['In-app']};
+      DB.alerts.unshift(al); pushNotification('🚨','High Priority','Potential hazard detected near Zone 4 — heavy rainfall and rising reports.'); },
+    ()=>{ pushActivity('DEMO: Zone 4 highlighted on Live Map', 'var(--teal)');
+      DB.hazards.unshift({id:'HZ-'+uid(), type:'Waterlogging', icon:'💧', severity:'HIGH', source:'AI Detection + Citizen Reports',
+        zone:'Zone 4', lat:DB.loc.lat+0.01, lon:DB.loc.lon+0.02, confidence:91, reports:5, detectedMinsAgo:2});
+      if(map) plotHazardsOnMap(); },
+    ()=>{ pushActivity('DEMO: Ask CityPulse can now explain this event', 'var(--blue)'); },
+  ];
+  let i=0;
+  const run = ()=>{ if(!DB.demoMode || i>=steps.length) return; steps[i](); i++; setTimeout(run,1800); };
+  run();
+}
+
+/* ---------------------------- REAL-TIME UPDATE ENGINE ---------------------------- */
+function realtimeTick(){
+  // gentle organic drift so the UI feels alive without external APIs
+  if(DB.weather && DB.weatherSource!=='LIVE'){
+    DB.weather.temp = Math.round((DB.weather.temp + rand(-0.3,0.3))*10)/10;
+  }
+  if(Math.random()<0.35){
+    const events = [
+      ['Traffic feed updated','var(--amber)'],
+      ['New citizen report received','var(--blue)'], ['AI hazard detected','var(--grape)']
+    ];
+    const [text,color] = choice(events);
+    pushActivity(text, color);
+  }
+  if(Math.random()<0.12){
+    pushNotification(choice(['🔵','🟢','🟡']), 'New citizen report', 'A new report was filed in '+choice(ZONE_OFFSETS).zone+'.');
+  }
+  if(currentView==='home'){ renderStatusCards(); }
+  renderStatusBar();
+}
+setInterval(realtimeTick, 7000);
+
+/* ---------------------------- RENDER ALL / BOOT ---------------------------- */
+function renderAll(){
+  renderStatusBar();
+  renderHome(); renderMapView(); renderLinksView(); renderHoursView();
+  renderReplayView(); renderAlertsView(); renderFeedsView(); renderAiView(); renderAskView(); renderReportView();
+}
+
+async function boot(){
+  renderShell(); __ui.forEach(f=>f());
+  seedAll();
+  renderAll();
+  go('home');
+  await fetchWeather();
+  renderAll();
+  go('home');
+}
+function refreshWeatherDependentUI(){
+  if(currentView==='home') renderStatusCards();
+  renderStatusBar();
+}
+const __ui=[];
+/* ==================== COMPLETION PATCH: modal, mobile menu, search, zones, categories ==================== */
+function openModal(html){
+  closeModal();
+  const m=document.createElement('div'); m.id='cpModal'; m.className='cp-modal';
+  m.innerHTML=`<div class="cp-modal-card card" role="dialog" aria-modal="true"><button class="cp-x" aria-label="Close" onclick="closeModal()">✕</button>${html}</div>`;
+  m.addEventListener('click',e=>{ if(e.target===m) closeModal(); });
+  document.body.appendChild(m);
+}
+function closeModal(){ document.getElementById('cpModal')?.remove(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal(); closeMobileMenu(); } });
+
+/* Trust center as in-page modal (popups get blocked) */
+openTrustModal=function(){
+  const items=['Data sources are identified','Live and simulated data are clearly separated','Missing feeds are displayed','Timestamps are shown','AI confidence is shown','Correlations are described as possible links','Correlation is not presented as causation','Personal identifying information is not publicly displayed','AI-generated conclusions are explainable'];
+  openModal(`<div class="eyebrow">TRUST CENTER</div><h2 class="section-title">How CityPulse Stays Honest</h2>
+   <div style="margin:12px 0">${items.map(i=>`<div class="evidence-row"><span>✓ ${i}</span></div>`).join('')}</div>
+   <div class="section-sub" style="margin:0">Every datum is one of: <b>FACT</b> (observed) · <b>DETECTION</b> (AI/system) · <b>POSSIBLE LINK</b> (temporal/statistical) · <b>INTERPRETATION</b> (AI explanation).</div>`);
+};
+
+/* Real mobile menu + bottom nav */
+function closeMobileMenu(){ document.getElementById('mobMenu')?.remove(); }
+function mobileMenu(){
+  closeMobileMenu();
+  const m=document.createElement('div'); m.id='mobMenu'; m.className='cp-modal';
+  m.innerHTML=`<div class="cp-modal-card card" style="max-width:360px">
+    <button class="cp-x" aria-label="Close menu" onclick="closeMobileMenu()">✕</button>
+    <div class="eyebrow">MENU</div>
+    ${NAV.map(([k,l])=>`<button class="mm-item ${k===currentView?'on':''}" onclick="closeMobileMenu();go('${k}')">${l}</button>`).join('')}
+    <select class="loc-select" style="width:100%;margin-top:12px" onchange="closeMobileMenu();changeLocation(this.value)">
+      ${Object.entries(LOCATIONS).map(([k,v])=>`<option value="${k}" ${k===DB.locKey?'selected':''}>${v.name}</option>`).join('')}</select></div>`;
+  m.addEventListener('click',e=>{ if(e.target===m) closeMobileMenu(); });
+  document.body.appendChild(m);
+}
+__ui.push(function(){
+  const bb=document.createElement('nav'); bb.className='bottomnav'; bb.setAttribute('aria-label','Primary');
+  bb.innerHTML=[['home','🏠','Home'],['map','🗺️','Map'],['report','📸','Report'],['ask','💬','Ask'],['alerts','🔔','Alerts']]
+    .map(([k,i,l])=>`<button data-b="${k}" onclick="go('${k}')"><span>${i}</span>${l}</button>`).join('');
+  document.body.appendChild(bb);
+  const _go=go; go=function(v){ _go(v); bb.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.b===v)); };
+  document.getElementById('burgerBtn').onclick=mobileMenu;
+});
+
+/* Zone intelligence */
+function zoneStats(name){
+  const hz=DB.hazards.filter(h=>h.zone===name), rp=DB.reports.filter(r=>r.zone===name);
+  const flood=hz.filter(h=>h.type==='Waterlogging').length+rp.filter(r=>r.type==='Flooding').length;
+  const worst=hz.some(h=>h.severity==='CRITICAL')?18:hz.some(h=>h.severity==='HIGH')?12:4;
+  const score=clamp(Math.round(DB.civic.score+8-worst-rp.length*1.5-flood*2),20,99);
+  return {hz,rp,flood,score};
+}
+function openZone(name){
+  const z=ZONE_OFFSETS.find(z=>z.zone===name); if(!z) return;
+  const s=zoneStats(name), w=DB.weather, last=DB.hourly?DB.hourly.traffic[DB.hourly.traffic.length-1]:'—';
+  const T=m=>{const d=new Date(Date.now()-m*60000);return pad(d.getHours())+':'+pad(d.getMinutes());};
+  const tl=[[40,'Rainfall signal checked','Open-Meteo'],[28,'First related report logged','Citizen Report'],[21,'Traffic delay estimate rose','Traffic (Demo Feed)'],[15,'Additional reports received','Citizen Report'],[10,'Possible pattern flagged','CityPulse Correlation']];
+  openModal(`<div class="eyebrow">ZONE INTELLIGENCE</div><h2 class="section-title">${name.toUpperCase()}</h2>
+   <div class="evidence-row"><span>Civic Health (composite)</span><b>${s.score} / 100</b></div>
+   <div class="evidence-row"><span>Weather</span><b>${w?w.condition+' · '+w.temp+'°C':'—'} <small style="color:var(--teal)">● LIVE</small></b></div>
+   <div class="evidence-row"><span>Traffic delay</span><b>+${last}% <small style="color:var(--txt-faint)">SIMULATED</small></b></div>
+   <div class="evidence-row"><span>Waterlogging signals</span><b>${s.flood}</b></div>
+   <div class="evidence-row"><span>AI hazards</span><b>${s.hz.length}</b></div>
+   <div class="evidence-row"><span>Citizen reports</span><b>${s.rp.length}</b></div>
+   <h4 style="margin:16px 0 4px;font-family:var(--disp)">WHAT CHANGED?</h4>
+   <div class="zone-timeline">${tl.map(([m,t,src])=>`<div class="zt-item"><span class="zt-time">${T(m)}</span><span>${t} <small style="color:var(--txt-faint)">— ${src}</small></span></div>`).join('')}</div>
+   <div style="font-size:11.5px;color:var(--txt-faint);font-style:italic;margin:6px 0 12px">Timeline is illustrative demo data. This is a possible correlation based on available civic data, not a confirmed cause.</div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="closeModal();go('map');setTimeout(()=>map&&map.setView([DB.loc.lat+${z.dy},DB.loc.lon+${z.dx}],15),120)">View on map</button>
+   <button class="btn btn-ghost btn-sm" onclick="closeModal();go('ask');setTimeout(()=>askQuestion('What is happening near ${name}?'),150)">Ask CityPulse</button></div>`);
+}
+
+/* Zone circles on the map (wrap original plotter) */
+(function(){
+  const _plot=plotHazardsOnMap;
+  plotHazardsOnMap=function(){
+    _plot(); if(!map) return;
+    ZONE_OFFSETS.forEach(z=>{
+      const s=zoneStats(z.zone), col=s.score<65?'#EF5350':s.score<78?'#F0A83D':'#19C7AE';
+      L.circle([DB.loc.lat+z.dy,DB.loc.lon+z.dx],{radius:650,color:col,weight:1.5,fillOpacity:.08})
+        .bindTooltip(`${z.zone} · ${s.score}/100`).on('click',()=>openZone(z.zone)).addTo(markerLayers.group);
+    });
+  };
+  /* Map style switcher */
+  const _init=initMapIfNeeded;
+  initMapIfNeeded=function(){
+    const first=!mapInitialized; _init();
+    if(first&&map){
+      const light=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'});
+      const topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'&copy; OpenTopoMap, OSM'});
+      L.control.layers({'Standard (OSM)':light,'Terrain':topo},{'Zones & markers':markerLayers.group,'Emergency services (OSM)':(window.osmLayer=window.osmLayer||L.layerGroup())},{position:'topright'}).addTo(map);
+      osmLayer.addTo(map); plotOSM();
+    }
+  };
+})();
+
+/* Civic health category drill-down */
+document.addEventListener('click',e=>{
+  const row=e.target.closest('.catbar-row'); if(!row) return;
+  const k=row.querySelector('.lbl').textContent, v=DB.civic.cats[k]; if(v==null) return;
+  const prev=clamp(v+Math.round(rand(-5,6)),0,100);
+  const factors={'Road Safety':['Open manhole / pothole detections','High-severity hazards'],'Traffic':['Estimated delay vs baseline','Rain-affected corridors'],'Environment':['Weather (Open-Meteo)','Air-quality feed status'],'Infrastructure':['Streetlight complaints','Waterlogging signals'],'Citizen Reports':['Report volume vs baseline','Verification backlog']}[k]||[];
+  openModal(`<div class="eyebrow">CIVIC HEALTH · CATEGORY</div><h2 class="section-title">${k}</h2>
+   <div class="evidence-row"><span>Current score</span><b>${v} / 100</b></div>
+   <div class="evidence-row"><span>Previous score</span><b>${prev} / 100</b></div>
+   <div class="evidence-row"><span>Updated</span><b>${nowStr()}</b></div>
+   <div class="evidence-row"><span>Factors</span><b style="text-align:right">${factors.join('<br>')}</b></div>
+   <div class="evidence-row"><span>Supporting data</span><b>${DB.hazards.length} hazards · ${DB.reports.length} reports</b></div>
+   <div style="font-size:12px;color:var(--txt-faint);margin-top:10px">This is a CityPulse composite indicator based on available signals. It is not an official government rating. Previous value is simulated.</div>`);
+});
+
+/* Global city search */
+__ui.push(function(){
+  const nr=document.querySelector('.nav-right');
+  const box=document.createElement('div'); box.className='gsearch mobile-hide';
+  box.innerHTML=`<input id="gsInput" placeholder="Search zone, hazard, report ID…" aria-label="Search city" autocomplete="off"><div id="gsRes" class="gs-res"></div>`;
+  nr.prepend(box);
+  const inp=box.querySelector('input'), res=box.querySelector('#gsRes');
+  inp.addEventListener('input',()=>{
+    const q=inp.value.trim().toLowerCase(); if(!q){res.style.display='none';return;}
+    const hits=[
+      ...ZONE_OFFSETS.filter(z=>z.zone.toLowerCase().includes(q)).map(z=>({t:'📍 '+z.zone,s:'Zone intelligence',f:()=>openZone(z.zone)})),
+      ...DB.reports.filter(r=>(r.id+' '+r.type).toLowerCase().includes(q)).slice(0,4).map(r=>({t:'🟡 '+r.id,s:`${r.type} · ${r.zone} · ${r.status}`,f:()=>{go('map');setTimeout(()=>map&&map.setView([r.lat,r.lon],16),120);}})),
+      ...DB.hazards.filter(h=>(h.type+' '+h.zone).toLowerCase().includes(q)).slice(0,4).map(h=>({t:(MARKER_META[h.type]?.emoji||'⚠️')+' '+h.type,s:`${h.zone} · ${h.severity}`,f:()=>{go('map');setTimeout(()=>{map&&map.setView([h.lat,h.lon],16);showInfoPanel(h);},150);}}))
+    ].slice(0,8);
+    res.innerHTML=hits.length?hits.map((h,i)=>`<button data-i="${i}"><b>${h.t}</b><small>${h.s}</small></button>`).join(''):'<div style="padding:10px;color:var(--txt-faint);font-size:12px">No matches in current data.</div>';
+    res.style.display='block';
+    res.querySelectorAll('button').forEach(b=>b.onclick=()=>{res.style.display='none';inp.value='';hits[b.dataset.i].f();});
+  });
+  document.addEventListener('click',e=>{ if(!box.contains(e.target)) res.style.display='none'; });
+});
+
+/* Zone chips on the map page filter panel + Home */
+(function(){
+  const _rm=renderMapView;
+  renderMapView=function(){
+    _rm(); const fp=document.querySelector('.filter-panel'); if(!fp) return;
+    fp.insertAdjacentHTML('beforeend',`<div class="filter-group"><h4>Zones</h4>${ZONE_OFFSETS.map(z=>`<button class="btn btn-ghost btn-sm" style="margin:0 6px 6px 0" onclick="openZone('${z.zone}')">${z.zone}</button>`).join('')}</div>`);
+  };
+  renderMapView();
+})();
+
+/* ==================== REAL API LAYER (no API keys required) ====================
+   Open-Meteo Forecast + Air Quality · OpenStreetMap Overpass (POIs) · Nominatim (geocoding).
+   Traffic has no free keyless public API, so it stays SIMULATED (see Feed Status). */
+const LIVE={
+  weather:{name:'Weather',source:'Open-Meteo Forecast API',type:'Environmental',err:null},
+  aq:{name:'Air Quality',source:'Open-Meteo Air Quality API',type:'Environmental',status:'PENDING',updated:null,err:null},
+  osm:{name:'Emergency Services (POIs)',source:'OpenStreetMap Overpass API',type:'Geographic',status:'PENDING',updated:null,err:null},
+  geo:{name:'Geocoding',source:'OpenStreetMap Nominatim',type:'Geographic',status:'PENDING',updated:null,err:null}
+};
+async function fetchJSON(url,opts={},ms=12000){
+  const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),ms);
+  try{ const r=await fetch(url,{...opts,signal:ctl.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
+  finally{ clearTimeout(t); }
+}
+/* Index of the current local hour in an Open-Meteo hourly.time array, then the trailing 24 values */
+function trailing24(j,arr){
+  const now=new Date(Date.now()+(j.utc_offset_seconds||0)*1000).toISOString().slice(0,13)+':00';
+  let i=j.hourly.time.indexOf(now); if(i<23) i=Math.min(j.hourly.time.length-1,47);
+  const from=Math.max(0,i-23), fill=[]; let last=null;
+  for(let k=from;k<=i;k++){ const v=arr[k]; last=(v==null?last:v); fill.push(last??0); }
+  return {vals:fill,labels:j.hourly.time.slice(from,i+1).map(s=>s.slice(11,16))};
+}
+function recomputeCivicFromLive(){
+  if(!DB.weather||!DB.civic) return;
+  const aqi=DB.aq?DB.aq.aqi:60, rain=DB.weather.rain||0;
+  DB.civic.cats['Environment']=clamp(Math.round(100-aqi*0.3-rain*4),20,99);
+  const vals=Object.values(DB.civic.cats), s=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+  if(s!==DB.civic.score){ DB.civic.prevScore=DB.civic.score; DB.civic.score=s; }
+}
+async function fetchWeather24(){
+  const {lat,lon}=DB.loc;
+  const j=await fetchJSON(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation&past_days=1&forecast_days=1&timezone=auto`);
+  const t=trailing24(j,j.hourly.temperature_2m), r=trailing24(j,j.hourly.precipitation);
+  DB.hourly.temp=t.vals.map(v=>Math.round(v*10)/10); DB.hourly.rain=r.vals.map(v=>Math.round(v*10)/10);
+  DB.hourLabels=t.labels; DB.hourlyLive=true;
+}
+async function fetchAirQuality(){
+  const {lat,lon}=DB.loc;
+  try{
+    const j=await fetchJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi,pm2_5,pm10&hourly=us_aqi&past_days=1&forecast_days=1&timezone=auto`);
+    if(j.current?.us_aqi==null) throw new Error('No AQI value for this location');
+    DB.aq={aqi:Math.round(j.current.us_aqi),pm25:j.current.pm2_5,pm10:j.current.pm10};
+    const s=trailing24(j,j.hourly.us_aqi); DB.hourly.aqi=s.vals.map(Math.round); DB.hourLabels=DB.hourLabels||s.labels; DB.aqiSeriesLive=true;
+    Object.assign(LIVE.aq,{status:'LIVE',updated:new Date(),err:null});
+  }catch(e){ DB.aq=null; DB.aqiSeriesLive=false; Object.assign(LIVE.aq,{status:'UNAVAILABLE',err:e.message||'Request failed'}); }
+}
+async function fetchOSM(){
+  const {lat,lon}=DB.loc;
+  const q=`[out:json][timeout:20];(node["amenity"~"^(hospital|police|fire_station)$"](around:8000,${lat},${lon}););out 60;`;
+  let lastErr;
+  for(const ep of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){
+    try{
+      const j=await fetchJSON(ep,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}},20000);
+      DB.osm=j.elements.map(e=>({id:e.id,lat:e.lat,lon:e.lon,kind:e.tags.amenity,name:e.tags.name||({hospital:'Hospital',police:'Police station',fire_station:'Fire station'})[e.tags.amenity]}));
+      Object.assign(LIVE.osm,{status:'LIVE',updated:new Date(),err:null}); plotOSM(); return;
+    }catch(e){ lastErr=e; }
+  }
+  DB.osm=[]; Object.assign(LIVE.osm,{status:'UNAVAILABLE',err:lastErr?.message||'Overpass unreachable'}); plotOSM();
+}
+function plotOSM(){
+  if(!map||!window.osmLayer) return;
+  osmLayer.clearLayers();
+  const em={hospital:'🏥',police:'🚓',fire_station:'🚒'};
+  (DB.osm||[]).forEach(p=>L.marker([p.lat,p.lon],{icon:makeDivIcon(em[p.kind])})
+    .bindPopup(`<div style="padding:12px"><b>${em[p.kind]} ${escapeHtml(p.name)}</b><div style="font-size:12px;color:#9AA6C8;margin-top:4px">${p.kind.replace('_',' ')}</div><div style="margin-top:8px"><span class="source-tag src-live"><span class="d"></span>LIVE — OpenStreetMap (Overpass)</span></div></div>`).addTo(osmLayer));
+}
+async function geocode(q){
+  try{
+    const j=await fetchJSON('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q='+encodeURIComponent(q));
+    Object.assign(LIVE.geo,{status:'LIVE',updated:new Date(),err:null});
+    return j.map(x=>({name:x.display_name,lat:+x.lat,lon:+x.lon}));
+  }catch(e){ Object.assign(LIVE.geo,{status:'UNAVAILABLE',err:e.message}); return []; }
+}
+function setCustomLocation(lat,lon,name){
+  LOCATIONS.custom={name:name.split(',').slice(0,2).join(',').trim(),lat,lon};
+  const sel=document.getElementById('locSelect');
+  if(sel){ let o=[...sel.options].find(o=>o.value==='custom'); if(!o){o=document.createElement('option');o.value='custom';sel.appendChild(o);} o.textContent=LOCATIONS.custom.name+' (custom)'; sel.value='custom'; }
+  changeLocation('custom');
+}
+let _liveBusy=false;
+async function refreshLive(withOSM=false){
+  if(_liveBusy) return; _liveBusy=true;
+  try{
+    await Promise.allSettled([fetchWeather(),fetchWeather24().catch(()=>{DB.hourlyLive=false;}),fetchAirQuality(),withOSM?fetchOSM():Promise.resolve()]);
+    recomputeCivicFromLive();
+    if(DB.weatherSource==='LIVE') pushActivity('Weather updated — Open-Meteo','var(--teal)');
+    if(LIVE.aq.status==='LIVE') pushActivity(`Air quality updated — AQI ${DB.aq.aqi} (Open-Meteo)`,'var(--teal)');
+    if(currentView==='home') renderHome(); else renderStatusCards();
+    renderStatusBar(); renderFeedsView(); if(currentView==='hours') renderHoursCharts();
+  } finally { _liveBusy=false; }
+}
+/* changing location must refetch everything */
+(function(){ const _cl=changeLocation; changeLocation=function(k){ _cl(k); DB.aq=null; DB.osm=[]; refreshLive(true); }; })();
+
+/* Feed status now reflects real request results */
+computeFeeds=function(){
+  const wLive=DB.weatherSource==='LIVE';
+  const feeds=[
+    {name:'Weather',source:'Open-Meteo Forecast API',status:wLive?'LIVE':'SIMULATED',updated:DB.weatherUpdated?timeAgo(DB.weatherUpdated):'—',type:'Environmental',err:wLive?null:'Open-Meteo unreachable — showing simulated values'},
+    {name:'Air Quality',source:LIVE.aq.source,status:LIVE.aq.status==='LIVE'?'LIVE':LIVE.aq.status==='PENDING'?'SIMULATED':'UNAVAILABLE',updated:LIVE.aq.updated?timeAgo(LIVE.aq.updated):'—',type:'Environmental',err:LIVE.aq.err},
+    {name:'Map Data',source:'OpenStreetMap tiles',status:'AVAILABLE',updated:'on demand',type:'Geographic',err:null},
+    {name:'Emergency Services',source:LIVE.osm.source,status:LIVE.osm.status==='LIVE'?'LIVE':LIVE.osm.status==='PENDING'?'SIMULATED':'UNAVAILABLE',updated:LIVE.osm.updated?timeAgo(LIVE.osm.updated):'—',type:'Geographic',err:LIVE.osm.err},
+    {name:'Geocoding',source:LIVE.geo.source,status:LIVE.geo.status==='LIVE'?'LIVE':'AVAILABLE',updated:LIVE.geo.updated?timeAgo(LIVE.geo.updated):'on search',type:'Geographic',err:LIVE.geo.err},
+    {name:'Citizen Reports',source:'In-browser demo store (no backend yet)',status:'SIMULATED',updated:'this session',type:'User-generated',err:null},
+    {name:'AI Detection',source:'CityPulse Vision (mock model)',status:'SIMULATED',updated:'on demand',type:'AI Inference',err:null},
+    {name:'Traffic',source:'Demo feed — no free public API',status:'SIMULATED',updated:'—',type:'Simulated',err:'Needs a keyed provider (e.g. TomTom/HERE) via a backend proxy'},
+    {name:'Civic Data',source:'Demo Feed',status:'SIMULATED',updated:'—',type:'Simulated',err:null},
+  ];
+  DB.feedsHealthy=feeds.filter(f=>f.status==='LIVE'||f.status==='AVAILABLE').length;
+  return feeds;
+};
+renderFeedsView=function(){
+  const el=document.getElementById('view-feeds'); if(!el) return;
+  const feeds=computeFeeds();
+  const col=s=>s==='LIVE'?'var(--teal)':s==='AVAILABLE'?'var(--blue)':s==='UNAVAILABLE'?'var(--red)':'var(--txt-faint)';
+  const pill=s=>s==='LIVE'?'pill-good':s==='UNAVAILABLE'?'pill-bad':'pill-info';
+  el.innerHTML=`<div class="eyebrow">SYSTEM TRANSPARENCY</div><h1 class="pagetitle">Feed Status</h1>
+   <p class="pagesub">Status reflects real requests made by this page. If a feed fails, it is shown as unavailable or simulated, and the rest of CityPulse keeps working.</p>
+   <div class="grid g3">${feeds.map(f=>`<div class="card feedcard">
+     <div class="fh"><b>${f.name}</b><span class="pill ${pill(f.status)}"><span class="status-dot" style="background:${col(f.status)}"></span>${f.status}</span></div>
+     <div style="font-size:12.5px;color:var(--txt-dim)">${f.source}</div>
+     <div style="font-size:11.5px;color:var(--txt-faint)">Type: ${f.type} · Updated ${f.updated}</div>
+     <div style="font-size:11.5px;color:${f.err?'var(--amber)':'var(--txt-faint)'}">${f.err?'Note: '+escapeHtml(f.err):'Error state: none'}</div>
+     <button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-top:4px" onclick="retryFeed('${f.name}')">Retry</button></div>`).join('')}</div>`;
+};
+retryFeed=function(name){
+  const done=()=>{ renderFeedsView(); renderStatusBar(); };
+  if(name==='Weather'||name==='Air Quality') refreshLive(false).then(done);
+  else if(name==='Emergency Services') fetchOSM().then(done);
+  else if(name==='Geocoding') geocode(DB.loc.name.split(',')[0]).then(done);
+  else { pushActivity(`${name}: no live source is connected`,'var(--amber)'); done(); }
+};
+
+/* Hours page: honest provenance note */
+(function(){
+  const _rh=renderHoursView;
+  renderHoursView=function(){
+    _rh(); const v=document.getElementById('view-hours'); if(!v) return;
+    const a=DB.hourlyLive?'<span class="source-tag src-live"><span class="d"></span>LIVE — Open-Meteo</span>':'<span class="source-tag src-sim"><span class="d"></span>SIMULATED</span>';
+    const b=DB.aqiSeriesLive?'<span class="source-tag src-live"><span class="d"></span>LIVE — Open-Meteo Air Quality</span>':'<span class="source-tag src-sim"><span class="d"></span>SIMULATED</span>';
+    v.insertAdjacentHTML('afterbegin',`<div style="font-size:12px;color:var(--txt-dim);margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">Data provenance — Temperature &amp; rain: ${a} · AQI: ${b} · Traffic, reports, hazards, civic health: <span class="source-tag src-sim"><span class="d"></span>SIMULATED</span></div>`);
+  };
+})();
+
+/* Real geolocation + reverse geocoding for reports */
+let __repCoords=null;
+useCurrentLocation=function(){
+  const inp=document.getElementById('repLoc');
+  if(!navigator.geolocation){ inp.placeholder='Geolocation not supported'; return; }
+  inp.value='Locating…';
+  navigator.geolocation.getCurrentPosition(async p=>{
+    __repCoords={lat:p.coords.latitude,lon:p.coords.longitude};
+    try{
+      const j=await fetchJSON(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=17&lat=${__repCoords.lat}&lon=${__repCoords.lon}`);
+      const a=j.address||{}; inp.value=[a.road,a.suburb||a.neighbourhood,a.city||a.town].filter(Boolean).join(', ')||'Current location';
+      Object.assign(LIVE.geo,{status:'LIVE',updated:new Date(),err:null});
+    }catch(e){ inp.value='Current location ('+__repCoords.lat.toFixed(4)+', '+__repCoords.lon.toFixed(4)+')'; }
+  },()=>{ inp.value=''; inp.placeholder='Location permission denied — type a place instead'; },{enableHighAccuracy:true,timeout:10000});
+};
+(function(){
+  const _sr=submitReport;
+  submitReport=function(){
+    const n=DB.reports.length; _sr();
+    if(__repCoords&&DB.reports.length>n){ DB.reports[0].lat=__repCoords.lat; DB.reports[0].lon=__repCoords.lon; __repCoords=null; if(map) plotHazardsOnMap(); }
+  };
+})();
+
+/* Search any place on Earth via Nominatim (press Enter) */
+__ui.push(function(){
+  const inp=document.getElementById('gsInput'), res=document.getElementById('gsRes'); if(!inp) return;
+  inp.addEventListener('keydown',async e=>{
+    if(e.key!=='Enter'||!inp.value.trim()) return;
+    res.innerHTML='<div style="padding:10px;font-size:12px;color:var(--txt-faint)">Searching OpenStreetMap…</div>'; res.style.display='block';
+    const hits=await geocode(inp.value.trim());
+    res.innerHTML=hits.length?hits.map((h,i)=>`<button data-i="${i}"><b>🌐 ${escapeHtml(h.name.split(',').slice(0,2).join(','))}</b><small>Set as location · OpenStreetMap Nominatim</small></button>`).join(''):'<div style="padding:10px;font-size:12px;color:var(--txt-faint)">No places found (or geocoder unavailable).</div>';
+    res.querySelectorAll('button').forEach(b=>b.onclick=()=>{res.style.display='none';inp.value='';const h=hits[b.dataset.i];setCustomLocation(h.lat,h.lon,h.name);});
+  });
+});
+
+/* keep data fresh: Open-Meteo updates ~every 15 min, so poll every 5 min */
+setInterval(()=>refreshLive(false),300000);
+(function(){ const _b=boot; boot=async function(){ await _b(); refreshLive(true); }; })();
+
+boot();
+</script>
+</body>
+</html>
